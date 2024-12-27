@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Home Page</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        /* Hero Section with Boxes */
+        .hero {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Keep 2 columns */
+            gap: 20px;
+            padding: 40px 20px;
+            background: #f9f9f9;
+        }
+
+        .hero .box {
+            background: #4caf50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-height: 650px; /* Set max height for the box */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+            text-decoration: none; /* Remove underline from links */
+        }
+
+        .hero .box:hover {
+            transform: scale(1.05); /* Scale up the box on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Add more shadow on hover */
+        }
+
+        .hero .box img {
+            width: 100%;
+            max-height: 500px; /* Ensure the image doesn't exceed box height */
+            object-fit: cover;
+            margin-bottom: 10px;
+            transition: opacity 0.3s ease; /* Smooth transition for image opacity */
+        }
+
+        .hero .box:hover img {
+            opacity: 0.8; /* Slightly fade image on hover */
+        }
+
+        .hero .box h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><i class="fas fa-home"></i> FadhilFat</div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <a href="/Login/password.html" class="box">
+                <img src="https://i.pinimg.com/736x/e5/6b/84/e56b841924ac729935e858cb59535fb7.jpg" alt="Image 1">
+                <h3>Log In</h3>
+            </a>
+            <a href="/Catatan/catatan.html" class="box">
+                <img src="https://i.pinimg.com/236x/c9/bb/07/c9bb0785dc38e9b41322e547a1524522.jpg" alt="Image 2">
+                <h3>Catatan</h3>
+            </a>
+            <a href="/Aritmatika/aritmatika.html" class="box">
+                <img src="https://i.pinimg.com/236x/e3/0a/2d/e30a2d409d8ecbb6b890470a90988d45.jpg" alt="Image 3">
+                <h3>Aritmatika</h3>
+            </a>
+            <a href="/Cocok/cocok.html" class="box">
+                <img src="https://i.pinimg.com/236x/f3/32/07/f33207bd2d97254d9ac20118c4a3bb77.jpg" alt="Image 4">
+                <h3>Cocok Kata</h3>
+            </a>
+            <a href="Todolist/todolist.html" class="box">
+                <img src="https://i.pinimg.com/236x/f3/32/07/f33207bd2d97254d9ac20118c4a3bb77.jpg" alt="Image 4">
+                <h3>To Do List</h3>
+            </a>
+            <a href="#" class="box">
+                <img src="https://via.placeholder.com/300x150" alt="Image 6">
+                <h3>Box 6</h3>
+            </a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FadhilFat. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
