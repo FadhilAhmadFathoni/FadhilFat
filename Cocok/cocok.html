@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 10px;
-            background-color: #e0f7fa; /* Warna latar belakang biru muda */
+            background-color: #e0f7fa;
         }
         .progress-container {
             width: 100%;
@@ -33,7 +33,7 @@
         .column {
             display: flex;
             flex-direction: column;
-            width: 45%; /* Lebar kolom untuk menyesuaikan ruang */
+            width: 45%;
         }
         .box {
             border: 1px solid #000;
@@ -94,11 +94,12 @@
         }
         @media (max-width: 600px) {
             .container {
-                flex-direction: column;
+                flex-direction: row; /* Pastikan dua kolom tetap ada */
+                justify-content: space-between;
                 gap: 10px;
             }
             .column {
-                width: 100%;
+                width: 48%; /* Mengatur lebar kolom agar pas dua kolom */
             }
             .box {
                 padding: 8px;
@@ -108,34 +109,21 @@
                 font-size: 14px;
             }
         }
-        .continue-button {
-            display: none;
-            padding: 10px 20px;
-            font-size: 18px;
+        #backButton {
+            padding: 10px 20px ;
+            background-color: #6c757d;
             color: white;
-            background-color: #007bff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
         }
-        .continue-button:hover {
-            background-color: #0056b3;
+        #backButton:hover {
+            background-color: #5a6268;
         }
-        #backButton {
-    padding: 10px 20px ;
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: block;
-    text-align: center;
-    margin-bottom: 10px;
-}#backButton:hover {
-    background-color: #5a6268;
-}
     </style>
 </head>
 <body>
@@ -154,12 +142,11 @@
         <div id="correct" class="score-box correct">Benar: 0</div>
         <div id="incorrect" class="score-box incorrect">Salah: 0</div>
     </div>
-    <button id="continue-button" class="continue-button" onclick="continueGame()">Lanjutkan</button>
 
     <script>
         document.getElementById("backButton").addEventListener("click", () => {
-        window.location.href = "../index.html"
-    });
+            window.location.href = "../index.html"
+        });
         const words = [
             { english: 'House', indonesian: 'Rumah', word: 'house' },
             { english: 'Cat', indonesian: 'Kucing', word: 'cat' },
@@ -270,7 +257,6 @@
             const totalBoxes = document.querySelectorAll('.box').length;
             if (allCorrect.length === totalBoxes) {
                 document.getElementById('result').textContent = 'Selamat! Kamu telah menyelesaikan permainan.';
-                document.getElementById('continue-button').classList.remove('hidden');
             }
         }
 
@@ -280,12 +266,6 @@
             const completedBoxes = document.querySelectorAll('.box.correct').length;
             const progressPercentage = (completedBoxes / totalBoxes) * 100;
             progressBar.style.width = progressPercentage + '%';
-        }
-
-        function continueGame() {
-            initializeGame();
-            document.getElementById('continue-button').classList.add('hidden');
-            document.getElementById('result').textContent = '';
         }
 
         window.onload = initializeGame;
