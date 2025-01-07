@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Mahasiswa</title>
+    <style>
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: scaleUp 0.3s ease-in-out;
+        }
+
+        .modal-content h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .modal-content p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                background-color: rgba(0, 0, 0, 0);
+            }
+
+            to {
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 2px solid #ccc;
+            outline: none;
+        }
+
+        select {
+            margin-bottom: 20px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            max-height: 500px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .card h3 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <button style="align-self: flex-start;" onclick="window.history.back();">Kembali</button>
+    <h1>Data Mahasiswa</h1>
+    <!-- Modal untuk pesan sambutan -->
+    <div id="welcomeModal" class="modal">
+        <div class="modal-content">
+            <h2>Selamat Datang!</h2>
+            <p>Selamat mencari data mahasiswa di halaman ini. Gunakan fitur pencarian dan filter untuk kemudahan Anda!
+            </p>
+            <button onclick="closeModal()">Mulai</button>
+        </div>
+    </div>
+
+    <!-- Dropdown untuk sorting -->
+    <select id="sortSelect" onchange="sortData()">
+        <option value="nama">Sort by Nama</option>
+        <option value="npm">Sort by NPM</option>
+        <option value="ttl">Sort by TTL</option>
+    </select>
+
+    <!-- Input pencarian -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-box" placeholder="Cari nama mahasiswa..."
+            onkeyup="searchMahasiswa()">
+    </div>
+
+    <!-- Container untuk card -->
+    <div class="cards-container" id="cardsContainer">
+        <!-- Card mahasiswa akan ditampilkan di sini -->
+    </div>
+
+    <script>
+        // Fungsi untuk menghasilkan warna acak
+        function generateRandomColor() {
+            var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            return randomColor;
+        }
+
+        // Mengubah warna latar belakang halaman secara acak
+        function changeBackgroundColor() {
+            document.body.style.backgroundColor = generateRandomColor();
+        }
+
+        // Menampilkan modal pesan sambutan
+        function showWelcomeMessage() {
+            const welcomeModal = document.getElementById('welcomeModal');
+            if (!localStorage.getItem('welcomeMessageShown')) {
+                welcomeModal.style.display = 'block';
+                localStorage.setItem('welcomeMessageShown', 'true'); // Menyimpan status di localStorage
+            }
+        }
+
+        // Menutup modal
+        function closeModal() {
+            const welcomeModal = document.getElementById('welcomeModal');
+            welcomeModal.style.display = 'none';
+        }
+        window.onload = function () {
+            changeBackgroundColor();
+            changeBackgroundColor();
+            showWelcomeMessage(); // Panggil fungsi pesan sambutan
+
+        };
+        class Mahasiswa {
+            constructor(Nama, NPM, TTL, Prodi, Fakultas, Foto) {
+                this.Nama = Nama;
+                this.NPM = NPM;
+                this.TTL = TTL;
+                this.Prodi = Prodi;
+                this.Fakultas = Fakultas;
+                this.Foto = Foto;
+            }
+
+            tampilkanData() {
+                return `
+                    <div class="card">
+                        <img src="${this.Foto}" alt="${this.Nama}">
+                        <h3>${this.Nama}</h3>
+                        <p><strong>NPM:</strong> ${this.NPM}</p>
+                        <p><strong>Tempat/Tanggal Lahir:</strong> ${this.TTL}</p>
+                        <p><strong>Prodi:</strong> ${this.Prodi}</p>
+                        <p><strong>Fakultas:</strong> ${this.Fakultas}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Membuat objek mahasiswa
+        const mahasiswaArray = [
+            new Mahasiswa(
+                "Fadhil Ahmad Fathoni",
+                "220660121069",
+                "Sumedang, 12 Januari 2000",
+                "Informatika",
+                "FTI",
+                "https://i.pinimg.com/474x/f3/8b/4c/f38b4c773e6d6b2f4a1c966846078c6e.jpg"
+            ),
+            new Mahasiswa(
+                "Asri Ayuni",
+                "220660121052",
+                "Sumedang, 12 Januari 2000",
+                "Informatika",
+                "FTI",
+                "https://i.pinimg.com/474x/0c/0a/64/0c0a64774d312b5e3686f37e56ada5fa.jpg"
+            ),
+            new Mahasiswa(
+                "Aura Rahayu Aksa Radiana",
+                "220660121094",
+                "Sumedang, 12 Januari 2000",
+                "Informatika",
+                "FTI",
+                "https://i.pinimg.com/474x/c0/b7/53/c0b753c9d904bdb41f7833324a552469.jpg"
+            )
+        ];
+
+        // Menampilkan semua card mahasiswa di halaman
+        function displayMahasiswa() {
+            const cardsContainer = document.getElementById("cardsContainer");
+            cardsContainer.innerHTML = ''; // Clear cards sebelum menampilkan yang baru
+            mahasiswaArray.forEach(mahasiswa => {
+                cardsContainer.innerHTML += mahasiswa.tampilkanData();
+            });
+        }
+
+        // Fungsi pencarian mahasiswa berdasarkan nama
+        function searchMahasiswa() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const filteredMahasiswa = mahasiswaArray.filter(mahasiswa =>
+                mahasiswa.Nama.toLowerCase().includes(searchInput)
+            );
+
+            const cardsContainer = document.getElementById("cardsContainer");
+            cardsContainer.innerHTML = ''; // Clear cards sebelum menampilkan hasil pencarian
+
+            filteredMahasiswa.forEach(mahasiswa => {
+                cardsContainer.innerHTML += mahasiswa.tampilkanData();
+            });
+        }
+
+        // Fungsi untuk melakukan sorting data berdasarkan kriteria yang dipilih
+        function sortData() {
+            const sortBy = document.getElementById('sortSelect').value;
+
+            if (sortBy === 'nama') {
+                mahasiswaArray.sort((a, b) => a.Nama.localeCompare(b.Nama));
+            } else if (sortBy === 'npm') {
+                mahasiswaArray.sort((a, b) => a.NPM.localeCompare(b.NPM));
+            } else if (sortBy === 'ttl') {
+                mahasiswaArray.sort((a, b) => a.TTL.localeCompare(b.TTL));
+            }
+
+            displayMahasiswa(); // Tampilkan data yang sudah diurutkan
+        }
+
+        // Panggil fungsi untuk menampilkan data mahasiswa saat halaman dimuat
+        displayMahasiswa();
+    </script>
+</body>
+
+</html>

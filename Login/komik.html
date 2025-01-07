@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi Komik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    background: linear-gradient(to bottom right, #f4f4f9, #c8e1ff);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+.form-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.form-group input, .form-group select, .form-group button {
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    flex: 1 1 100%;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group button:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-group input, .form-group select {
+    background-color: #fafafa;
+}
+
+.form-group button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.form-group button:hover, .btn-back:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+table tr:hover {
+    background-color: #e9f7ff;
+    cursor: pointer;
+}
+
+th, td {
+    padding: 18px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.1em;
+}
+
+th {
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+th:hover {
+    background: #0056b3;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+.action-buttons i {
+    cursor: pointer;
+    margin-right: 12px;
+    transition: color 0.3s ease;
+}
+
+.action-buttons i:hover {
+    color: #0056b3;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 5px;
+    color: white;
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+.badge:hover {
+    transform: scale(1.1);
+}
+
+.badge.green {
+    background: #28a745;
+}
+
+.badge.red {
+    background: #dc3545;
+}
+
+
+.btn-back {
+    display: inline-block;
+    margin: 25px 0;
+    padding: 12px 24px;
+    background: #ff5733;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 18px;
+    text-align: center;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-back:hover {
+    background: #c4451a;
+    transform: scale(1.05);
+}
+.notification {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    opacity: 0;
+    animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.notification.show {
+    display: block;
+}
+.btn-loading {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-loading .spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: modalFadeIn 0.5s ease-out;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+}
+
+.modal.show, .modal-overlay.show {
+    display: block;
+}
+@keyframes modalFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    table {
+        font-size: 15px;
+    }
+
+    .btn-back {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-group input, .form-group select, .form-group button {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
+    <div class="container">
+        <h1>Koleksi Komik</h1>
+        <div class="form-group">
+            <h3>Pencarian & Filter</h3>
+            <input type="text" id="search" placeholder="Cari Komik berdasarkan Judul">
+            <select id="filterColor">
+                <option value="">Semua Warna</option>
+                <option value="green">Hijau</option>
+                <option value="red">Merah</option>
+            </select>
+            <select id="filterLikes">
+                <option value="">Semua Likes</option>
+                <option value="more">Lebih dari 5 Likes</option>
+                <option value="less">Kurang dari 5 Likes</option>
+            </select>
+<br>
+<h3>Tambah Komik</h3>
+            <input type="text" id="title" placeholder="Judul Komik">
+            <input type="number" id="chapter" placeholder="Chapter Terakhir">
+            <select id="color">
+                <option value="green">Hijau</option>
+                <option value="red">Merah</option>
+            </select>
+            <button id="addComic" class="btn-loading">Tambah Komik
+                <div class="spinner"></div>
+            </button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th id="sortTitle">Judul <i class="fas fa-sort"></i></th>
+                    <th id="sortChapter">Chapter <i class="fas fa-sort"></i></th>
+                    <th>Warna</th>
+                    <th id="sortLikes">Like <i class="fas fa-sort"></i></th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="comicTable"></tbody>
+        </table>
+    </div>
+    
+    <!-- Modal for Edit -->
+    <div class="modal-overlay"></div>
+    <div class="modal">
+        <h2>Edit Komik</h2>
+        <div class="form-group">
+            <input type="text" id="editTitle" placeholder="Judul Komik">
+            <input type="number" id="editChapter" placeholder="Chapter Terakhir">
+            <select id="editColor">
+                <option value="green">Hijau</option>
+                <option value="red">Merah</option>
+            </select>
+            <button id="saveEdit">Simpan</button>
+        </div>
+    </div>
+    
+    <!-- Notification Alert -->
+    <div class="notification">Komik berhasil ditambahkan!</div>
+    
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTw6gc6SbmZCcc2wTI3sK24SCx0OFrdgI",
+            authDomain: "cocok-f9c04.firebaseapp.com",
+            databaseURL: "https://cocok-f9c04-default-rtdb.firebaseio.com",
+            projectId: "cocok-f9c04",
+            storageBucket: "cocok-f9c04.firebasestorage.app",
+            messagingSenderId: "89712979326",
+            appId: "1:89712979326:web:b7f9072b49f926e7b9172f",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, "komik");
+
+        const titleInput = document.getElementById("title");
+        const chapterInput = document.getElementById("chapter");
+        const colorInput = document.getElementById("color");
+        const addComicButton = document.getElementById("addComic");
+        const comicTable = document.getElementById("comicTable");
+
+        const editModal = document.querySelector(".modal");
+        const overlay = document.querySelector(".modal-overlay");
+        const editTitleInput = document.getElementById("editTitle");
+        const editChapterInput = document.getElementById("editChapter");
+        const editColorInput = document.getElementById("editColor");
+        const saveEditButton = document.getElementById("saveEdit");
+
+        let editingComicId = null;
+
+        // Add comic
+        addComicButton.addEventListener("click", () => {
+            const title = titleInput.value.trim();
+            const chapter = chapterInput.value.trim();
+            const color = colorInput.value;
+            if (title && chapter) {
+                push(dbRef, { title, chapter, color, likes: 0 });
+                titleInput.value = "";
+                chapterInput.value = "";
+                colorInput.value = "green";
+            }
+        });
+        // Pencarian dan Filter
+const searchInput = document.getElementById("search");
+const filterColor = document.getElementById("filterColor");
+const filterLikes = document.getElementById("filterLikes");
+
+searchInput.addEventListener("input", filterComics);
+filterColor.addEventListener("change", filterComics);
+filterLikes.addEventListener("change", filterComics);
+
+function filterComics() {
+    const searchText = searchInput.value.toLowerCase();
+    const colorFilter = filterColor.value;
+    const likesFilter = filterLikes.value;
+
+    // Ambil semua baris komik
+    const comics = Array.from(comicTable.rows);
+    comics.shift(); // Hapus baris header dari pencarian dan filter
+    
+    comics.forEach(row => {
+        const title = row.cells[0].textContent.toLowerCase();
+        const color = row.cells[2].textContent.trim();
+        const likes = parseInt(row.cells[3].textContent.trim());
+
+        // Cek apakah baris sesuai dengan pencarian dan filter
+        const matchesSearch = title.includes(searchText);
+        const matchesColor = colorFilter ? color === colorFilter : true;
+        const matchesLikes = likesFilter === "more" ? likes > 5 : (likesFilter === "less" ? likes < 5 : true);
+
+        // Menampilkan atau menyembunyikan baris
+        if (matchesSearch && matchesColor && matchesLikes) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+document.getElementById('addComic').addEventListener('click', function() {
+    // Menampilkan spinner
+    this.classList.add('btn-loading');
+    var spinner = this.querySelector('.spinner');
+    spinner.style.display = 'block'; // Menampilkan spinner
+
+    // Simulasi proses pemuatan (misalnya, saat mengirim data)
+    setTimeout(function() {
+        // Setelah selesai, sembunyikan spinner
+        spinner.style.display = 'none';
+        // Hapus kelas loading dari tombol
+        document.getElementById('addComic').classList.remove('btn-loading');
+    }, 3000); // Simulasi waktu pemrosesan 3 detik
+});
+
+// Add sorting functionality
+let sortOrder = { title: 'asc', chapter: 'asc', likes: 'asc' };
+
+document.getElementById("sortTitle").addEventListener("click", () => {
+    sortComics("title");
+});
+
+document.getElementById("sortChapter").addEventListener("click", () => {
+    sortComics("chapter");
+});
+
+document.getElementById("sortLikes").addEventListener("click", () => {
+    sortComics("likes");
+});
+
+function sortComics(column) {
+    const comics = Array.from(comicTable.rows);
+    
+    comics.shift(); // Remove header row from sorting
+    
+    comics.sort((a, b) => {
+        const cellA = a.cells[column === "title" ? 0 : column === "chapter" ? 1 : 3].textContent.trim();
+        const cellB = b.cells[column === "title" ? 0 : column === "chapter" ? 1 : 3].textContent.trim();
+        
+        if (column === "chapter" || column === "likes") {
+            return (sortOrder[column] === 'asc') ? (parseInt(cellA) - parseInt(cellB)) : (parseInt(cellB) - parseInt(cellA));
+        }
+        
+        return (sortOrder[column] === 'asc') ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+    });
+
+    // Re-add rows to the table
+    comics.forEach(row => comicTable.appendChild(row));
+    
+    // Toggle the sorting order
+    sortOrder[column] = (sortOrder[column] === 'asc') ? 'desc' : 'asc';
+}
+
+        // Display comics
+        onValue(dbRef, (snapshot) => {
+            comicTable.innerHTML = "";
+            snapshot.forEach((childSnapshot) => {
+                const comic = { id: childSnapshot.key, ...childSnapshot.val() };
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${comic.title}</td>
+                    <td>${comic.chapter}</td>
+                    <td><span class="badge ${comic.color}">${comic.color}</span></td>
+                    <td>${comic.likes}</td>
+                    <td class="action-buttons">
+                        <i class="fas fa-thumbs-up" title="Like"></i>
+                        <i class="fas fa-edit" title="Edit"></i>
+                    </td>
+                `;
+
+                row.querySelector(".fa-thumbs-up").addEventListener("click", () => {
+                    update(ref(db, `komik/${comic.id}`), { likes: comic.likes + 1 });
+                });
+
+                row.querySelector(".fa-edit").addEventListener("click", () => {
+                    editingComicId = comic.id;
+                    editTitleInput.value = comic.title;
+                    editChapterInput.value = comic.chapter;
+                    editColorInput.value = comic.color;
+                    editModal.classList.add("show");
+                    overlay.classList.add("show");
+                });
+
+                comicTable.appendChild(row);
+            });
+        });
+
+        saveEditButton.addEventListener("click", () => {
+            const title = editTitleInput.value.trim();
+            const chapter = editChapterInput.value.trim();
+            const color = editColorInput.value;
+
+            if (editingComicId && title && chapter) {
+                update(ref(db, `komik/${editingComicId}`), { title, chapter, color });
+                editModal.classList.remove("show");
+                overlay.classList.remove("show");
+            }
+        });
+
+        overlay.addEventListener("click", () => {
+            editModal.classList.remove("show");
+            overlay.classList.remove("show");
+        });
+    </script>
+</body>
+</html>
