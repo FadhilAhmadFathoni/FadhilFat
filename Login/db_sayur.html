@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Sayur</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 CDN -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fcaba0;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* Button Kembali */
+        button.back {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin: 20px;
+        }
+        button.back:hover {
+            background-color: #0056b3;
+        }
+
+        /* Center Add Button */
+        .center-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button.add {
+            padding: 12px 30px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button.add:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Hidden Box */
+        .hidden{
+            display: none;
+        }
+
+        .tambah_db {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .tambah_db:hover {
+            transform: scale(1.03);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button[type="submit"] {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Actions */
+        .actions button {
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .actions button:hover {
+            transform: scale(1.2);
+        }
+        .actions .edit-icon {
+            color: #ffc107;
+        }
+        .actions .delete-icon {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            .tambah_db {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .center-container button.add {
+                width: 90%;
+                font-size: 16px;
+            }
+            form {
+                gap: 15px;
+            }
+            input, button[type="submit"] {
+                font-size: 14px;
+            }
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back" onclick="window.history.back()">Kembali</button>
+    <h1>Database Sayur</h1>
+
+    <div class="center-container">
+        <button class="add" onclick="toggleBox()">Tambah Barang</button>
+    </div>
+
+    <div id="box" class="hidden">
+        <div class="tambah_db">
+            <form id="crudForm">
+                <input type="hidden" name="key">
+                <label for="namaBarang">Nama Barang:</label>
+                <input type="text" name="namaBarang" id="namaBarang" placeholder="Masukkan nama barang" required>
+                <label for="harga">Harga:</label>
+                <input type="number" name="harga" id="harga" placeholder="Masukkan harga barang" min="1" required>
+                <button type="submit">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Barang</th>
+                <th>Harga</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTw6gc6SbmZCcc2wTI3sK24SCx0OFrdgI",
+            authDomain: "cocok-f9c04.firebaseapp.com",
+            databaseURL: "https://cocok-f9c04-default-rtdb.firebaseio.com",
+            projectId: "cocok-f9c04",
+            storageBucket: "cocok-f9c04.appspot.com",
+            messagingSenderId: "89712979326",
+            appId: "1:89712979326:web:b7f9072b49f926e7b9172f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'sayur');
+
+        const tableBody = document.getElementById('tableBody');
+        const form = document.getElementById('crudForm');
+
+        // Format number to currency
+        const formatRupiah = (angka) => 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Create or Update data
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const namaBarang = form.namaBarang.value.trim();
+            const harga = parseInt(form.harga.value.trim(), 10);
+            const key = form.key.value;
+
+            if (key) {
+                update(ref(db, `sayur/${key}`), { namaBarang, harga }).then(() => {
+                    Swal.fire(
+                        'Berhasil!',
+                        'Data barang telah diperbarui.',
+                        'success'
+                    );
+                });
+            } else {
+                push(dbRef, { namaBarang, harga }).then(() => {
+                    Swal.fire(
+                        'Berhasil!',
+                        'Data barang telah ditambahkan.',
+                        'success'
+                    );
+                });
+            }
+            form.reset();
+        });
+
+        // Toggle box
+        function toggleBox() {
+            const box = document.getElementById('box');
+            box.classList.toggle('hidden');
+        }
+        window.toggleBox=toggleBox;
+
+        // Read data
+        onValue(dbRef, (snapshot) => {
+            tableBody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const key = childSnapshot.key;
+                const data = childSnapshot.val();
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${data.namaBarang}</td>
+                        <td>${formatRupiah(data.harga)}</td>
+                        <td class="actions">
+                            <button onclick="editData('${key}', '${data.namaBarang}', '${data.harga}')" class="edit-icon">✏️</button>
+                            <button onclick="confirmDelete('${key}')" class="delete-icon">🗑️</button>
+                        </td>
+                    </tr>`;
+            });
+        });
+
+        // SweetAlert2 untuk konfirmasi Hapus
+        window.confirmDelete = (key) => {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    remove(ref(db, `sayur/${key}`)).then(() => {
+                        Swal.fire(
+                            'Terhapus!',
+                            'Data barang telah dihapus.',
+                            'success'
+                        );
+                    });
+                }
+            });
+        };
+
+        // Edit data
+        window.editData = (key, namaBarang, harga) => {
+            form.key.value = key;
+            form.namaBarang.value = namaBarang;
+            form.harga.value = harga;
+        };
+    </script>
+</body>
+</html>

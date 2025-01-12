@@ -276,25 +276,16 @@ th, td {
     }
 }
 
+/* Hapus aturan di bawah ini agar tabel tetap menjadi tabel */
 @media (max-width: 480px) {
+    table {
+        font-size: 12px; /* Atur ulang ukuran font */
+    }
     th, td {
-        display: block; /* Ubah tabel menjadi berbasis card */
-        width: 100%; /* Full width */
-        text-align: right; /* Sesuaikan tata letak */
-        position: relative;
-    }
-
-    th {
-        text-align: left;
-    }
-
-    td:before {
-        content: attr(data-label); /* Gunakan atribut untuk label kolom */
-        font-weight: bold;
-        text-align: left;
-        display: inline-block;
+        padding: 4px; /* Sesuaikan padding */
     }
 }
+
 
 
 .hidden {
@@ -366,7 +357,7 @@ th, td {
     </button>
 </div>
 
-<div class="table-responsive">
+<!-- <div class="table-responsive"> -->
         <table>
             <thead>
                 <tr>
@@ -379,7 +370,6 @@ th, td {
             </thead>
             <tbody id="comicTable"></tbody>
         </table>
-    </div>
     
     <!-- Modal for Edit -->
     <div class="modal-overlay"></div>
@@ -595,6 +585,7 @@ function sortComics(column) {
             editModal.classList.remove("show");
             overlay.classList.remove("show");
         });
+    
     </script>
 </body>
 </html>
