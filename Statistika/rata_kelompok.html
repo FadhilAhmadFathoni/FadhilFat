@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rata-rata Data Kelompok (Frekuensi dan Nilai)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f7fc;
+            color: #333;
+            transition: background-color 0.5s ease;
+        }
+        h2 {
+            color: #4e73df;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4e73df;
+            color: white;
+        }
+        td input {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        button {
+            background-color: #4e73df;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background-color: #2e59d9;
+            transform: scale(1.1);
+        }
+        button[disabled] {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+        button[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            background: #4e73df;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.9rem;
+        }
+        #chartContainer {
+            width: 80%;
+            margin: 30px auto;
+        }
+        #hasil, #totalFrekuensi {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #4e73df;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .card i {
+            font-size: 3rem;
+            transition: transform 0.3s ease;
+        }
+        .card:hover i {
+            transform: rotate(10deg);
+        }
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Data Nilai Kelompok (Frekuensi dan Nilai)</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Nilai</th>
+                <th>Frekuensi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Baris awal dimuat dari LocalStorage -->
+        </tbody>
+    </table>
+    <div class="button-container">
+        <button onclick="tambahBaris()" title="Tambah baris baru"><i class="fas fa-plus"></i> Tambah Baris</button>
+        <button onclick="hapusBaris()" title="Hapus baris terakhir" id="hapusButton" disabled><i class="fas fa-trash-alt"></i> Hapus Baris Terakhir</button>
+        <button onclick="hitungRataRata()" title="Hitung rata-rata nilai kelompok"><i class="fas fa-calculator"></i> Hitung Rata-rata</button>
+        <button onclick="resetData()" title="Reset semua data"><i class="fas fa-sync-alt"></i> Reset Data</button>
+    </div>
+    <div class="card">
+        <h3 id="hasil"></h3>
+        <p id="totalFrekuensi"></p>
+    </div>
+
+    <!-- Canvas untuk diagram -->
+    <div id="chartContainer">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // Fungsi untuk memuat data dari LocalStorage saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTableData();
+        });
+
+        // Simpan data tabel ke LocalStorage
+        function saveTableData() {
+            const tableData = getTableData();
+            localStorage.setItem('tableData', JSON.stringify(tableData));
+            document.getElementById('hapusButton').disabled = tableData.length <= 1;
+        }
+
+        // Muat data tabel dari LocalStorage
+        function loadTableData() {
+            const storedData = localStorage.getItem('tableData');
+            const tbody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = ''; // Kosongkan tabel sebelum memuat data
+            if (storedData) {
+                const tableData = JSON.parse(storedData);
+                tableData.forEach(row => {
+                    const newRow = tbody.insertRow();
+                    const cell1 = newRow.insertCell(0);
+                    const cell2 = newRow.insertCell(1);
+                    cell1.innerHTML = `<input type="number" class="nilai" value="${row.nilai}" oninput="saveTableData()">`;
+                    cell2.innerHTML = `<input type="number" class="frekuensi" value="${row.frekuensi}" oninput="saveTableData()">`;
+                });
+            } else {
+                tambahBaris(); // Tambahkan baris default jika LocalStorage kosong
+            }
+        }
+
+        function tambahBaris() {
+            const tbody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+            const newRow = tbody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            cell1.innerHTML = '<input type="number" class="nilai" value="0" oninput="saveTableData()">';
+            cell2.innerHTML = '<input type="number" class="frekuensi" value="0" oninput="saveTableData()">';
+            saveTableData();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Baris Ditambahkan!',
+                text: 'Baris baru telah berhasil ditambahkan.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        function hapusBaris() {
+            const tbody = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
+            const rows = tbody.rows.length;
+
+            if (rows > 1) {
+                tbody.deleteRow(rows - 1);
+                saveTableData();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Baris Terhapus!',
+                    text: 'Baris terakhir telah berhasil dihapus.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Aksi Ditolak!',
+                    text: 'Minimal harus ada 1 baris data.',
+                });
+            }
+        }
+
+        function hitungRataRata() {
+            const nilaiElements = document.getElementsByClassName('nilai');
+            const frekuensiElements = document.getElementsByClassName('frekuensi');
+
+            let totalFrekuensi = 0;
+            let totalNilai = 0;
+            const labels = [];
+            const data = [];
+
+            for (let i = 0; i < nilaiElements.length; i++) {
+                const nilai = parseFloat(nilaiElements[i].value);
+                const frekuensi = parseInt(frekuensiElements[i].value);
+
+                if (isNaN(nilai) || isNaN(frekuensi) || nilai <= 0 || frekuensi <= 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Input Tidak Valid!',
+                        text: 'Nilai dan Frekuensi harus lebih besar dari 0.',
+                    });
+                    return;
+                }
+
+                totalFrekuensi += frekuensi;
+                totalNilai += nilai * frekuensi;
+                labels.push(nilai); // Nilai sebagai label
+                data.push(frekuensi); // Frekuensi sebagai data
+            }
+
+            const rataRata = totalNilai / totalFrekuensi;
+            document.getElementById('hasil').innerText = 'Rata-rata Nilai Kelompok: ' + rataRata.toFixed(2);
+            document.getElementById('totalFrekuensi').innerText = 'Total Frekuensi: ' + totalFrekuensi;
+
+            // Menampilkan grafik
+            showChart(labels, data);
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Perhitungan Selesai!',
+                text: 'Rata-rata: ' + rataRata.toFixed(2) + ' | Total Frekuensi: ' + totalFrekuensi,
+            });
+        }
+
+        function showChart(labels, data) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            if (window.barChart) {
+                window.barChart.destroy(); // Hapus chart sebelumnya jika ada
+            }
+            window.barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frekuensi',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetData() {
+            localStorage.removeItem('tableData');
+            loadTableData();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Data Direset!',
+                text: 'Semua nilai dan frekuensi telah direset ke nilai awal.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        function getTableData() {
+            const tableData = [];
+            const nilaiElements = document.getElementsByClassName('nilai');
+            const frekuensiElements = document.getElementsByClassName('frekuensi');
+            for (let i = 0; i < nilaiElements.length; i++) {
+                tableData.push({
+                    nilai: nilaiElements[i].value,
+                    frekuensi: frekuensiElements[i].value
+                });
+            }
+            return tableData;
+        }
+    </script>
+</body>
+</html>
