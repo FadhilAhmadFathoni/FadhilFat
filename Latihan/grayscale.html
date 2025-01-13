@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grayscale</title>
+    <style>
+        /* Efek Grayscale */
+        .abu {
+            filter: grayscale(1);
+            transition: 0.5s ease;
+        }
+        img {
+            max-width: 100%;
+            width: 400px;
+            display: block;
+            margin: auto;
+        }
+        .abu:hover {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        /* Kotak dengan latar abu-abu */
+        .box {
+            background-color: darkgray;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            width: fit-content;
+            margin: 20px auto;
+        }
+
+        /* Wrapper untuk parent dan child */
+        .wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px auto;
+        }
+        .parent {
+            width: 250px;
+            height: 280px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .child {
+            height: 100%;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        .bg-one {
+            background-image: url('https://i.pinimg.com/736x/ee/41/fc/ee41fc56deafe240d068e67edc2c1349.jpg');
+        }
+        .bg-two {
+            background-image: url('https://i.pinimg.com/736x/c4/37/7c/c4377c4d488d775493bb0bd95de0a25e.jpg');
+        }
+        .bg-three {
+            background-image: url('https://i.pinimg.com/736x/a4/d5/3e/a4d53e0b2cd3b32d3ecb8f78ed5e20c6.jpg');
+        }
+        .bg-four {
+            background-image: url('https://i.pinimg.com/736x/fc/24/93/fc24938ea44c23f8e0e5d2a88988c42a.jpg');
+        }
+
+        /* Zoom pada gambar */
+        .zoom {
+            width: 300px;
+            transition: transform 0.3s ease;
+            margin: 20px auto;
+            display: block;
+        }
+        .zoom:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Wrapper untuk kotak latar gambar -->
+    <div class="wrapper">
+        <div class="parent">
+            <div class="child bg-one"></div>
+        </div>
+        <div class="parent">
+            <div class="child bg-two"></div>
+        </div>
+        <div class="parent">
+            <div class="child bg-three"></div>
+        </div>
+        <div class="parent">
+            <div class="child bg-four"></div>
+        </div>
+    </div>
+
+    <!-- Gambar dengan efek zoom -->
+    <img src="https://i.pinimg.com/736x/ee/41/fc/ee41fc56deafe240d068e67edc2c1349.jpg" 
+         class="zoom" alt="Gambar dengan efek zoom">
+
+    <!-- Kotak dengan efek grayscale -->
+    <div class="box">
+        <img src="https://i.pinimg.com/736x/c4/37/7c/c4377c4d488d775493bb0bd95de0a25e.jpg" 
+             class="abu" alt="Momoi dalam efek grayscale">
+        <h5>Holaa tekobaro</h5>
+    </div>
+</body>
+</html>

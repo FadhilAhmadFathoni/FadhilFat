@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitung Median Tunggal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .container:hover {
+            transform: scale(1.02);
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        p {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+        }
+        input, button {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #444;
+            text-align: center;
+        }
+        .explanation {
+            margin-top: 20px;
+            font-size: 1em;
+            color: #666;
+            text-align: center;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+        .history {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .history h3 {
+            text-align: center;
+            color: #007bff;
+        }
+        .history-item {
+            background: #eaf3fc;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .history-item:hover {
+            background: #d3e7f9;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+            input, button {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .result, .explanation {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Hitung Median Tunggal</h2>
+        <p>Masukkan angka, pisahkan dengan koma:</p>
+        <input type="text" id="numbers" placeholder="Contoh: 3, 7, 2, 9, 1">
+        <button onclick="calculateMedian()">Hitung Median</button>
+        <button onclick="resetFields()">Reset</button>
+        <button onclick="clearHistory()">Hapus Riwayat</button>
+        <div class="result" id="result"></div>
+        <div class="explanation" id="explanation"></div>
+        <canvas id="chart" width="400" height="200"></canvas>
+        <div class="history" id="history">
+            <h3>Riwayat Perhitungan</h3>
+        </div>
+    </div>
+
+    <script>
+        let history = JSON.parse(localStorage.getItem('calculationHistory')) || [];
+
+        function calculateMedian() {
+            const input = document.getElementById('numbers').value.trim();
+
+            if (input === '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Masukkan data angka terlebih dahulu!'
+                });
+                return;
+            }
+
+            if (!/^\d+(,\d+)*$/.test(input)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Format Salah',
+                    text: 'Masukkan hanya angka yang dipisahkan oleh koma!'
+                });
+                return;
+            }
+
+            const numbers = input.split(',').map(Number);
+            numbers.sort((a, b) => a - b);
+
+            const mid = Math.floor(numbers.length / 2);
+            let median;
+
+            if (numbers.length % 2 === 0) {
+                median = (numbers[mid - 1] + numbers[mid]) / 2;
+            } else {
+                median = numbers[mid];
+            }
+
+            document.getElementById('result').innerHTML = `Data setelah diurutkan: ${numbers.join(', ')}<br>Median: ${median}`;
+            updateChart(numbers, median);
+            addToHistory(input, median);
+        }
+
+        function resetFields() {
+            Swal.fire({
+                title: 'Reset Data',
+                text: 'Apakah Anda yakin ingin menghapus semua data?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Reset!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('numbers').value = '';
+                    document.getElementById('result').textContent = '';
+                    document.getElementById('explanation').textContent = '';
+                    if (window.myChart) {
+                        window.myChart.destroy();
+                    }
+
+                    Swal.fire(
+                        'Data Direset!',
+                        'Semua data telah dihapus.',
+                        'success'
+                    );
+                }
+            });
+        }
+
+        function updateChart(data, median) {
+            const frequencyMap = {};
+            data.forEach(num => {
+                frequencyMap[num] = (frequencyMap[num] || 0) + 1;
+            });
+
+            const labels = Object.keys(frequencyMap);
+            const frequencies = Object.values(frequencyMap);
+
+            const ctx = document.getElementById('chart').getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Frekuensi',
+                            data: frequencies,
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bilangan'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frekuensi'
+                            }
+                        }
+                    },
+                    plugins: {
+                        annotation: {
+                            annotations: {
+                                medianLine: {
+                                    type: 'line',
+                                    scaleID: 'x',
+                                    value: median,
+                                    borderColor: 'red',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: `Median (${median})`,
+                                        enabled: true,
+                                        position: 'end'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function addToHistory(input, median) {
+            const timestamp = new Date().toLocaleString();
+            history.unshift({ data: input, median, timestamp });
+            localStorage.setItem('calculationHistory', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = '<h3>Riwayat Perhitungan</h3>';
+
+            history.forEach(item => {
+                const newItem = document.createElement('div');
+                newItem.className = 'history-item';
+                newItem.textContent = `Data: ${item.data} -> Median: ${item.median} (Pada tanggal dan waktu ${item.timestamp})`;
+                historyDiv.appendChild(newItem);
+            });
+        }
+
+        function clearHistory() {
+            Swal.fire({
+                title: 'Hapus Riwayat',
+                text: 'Apakah Anda yakin ingin menghapus semua riwayat perhitungan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    history = [];
+                    localStorage.setItem('calculationHistory', JSON.stringify(history));
+                    renderHistory();
+                    Swal.fire('Dihapus!', 'Riwayat perhitungan telah dihapus.', 'success');
+                }
+            });
+        }
+
+        renderHistory();
+    </script>
+</body>
+</html>
