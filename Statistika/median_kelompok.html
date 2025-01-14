@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Median Kelompok Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-top: 30px;
+    color: #2c3e50;
+}
+input[type="number"] {
+    width: 100%; /* Mengatur input untuk mengisi lebar kolom */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Memastikan padding dihitung dalam lebar input */
+}
+
+table td {
+    padding: 0; /* Menghapus padding agar input memanfaatkan seluruh ruang kolom */
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #2c3e50;
+    color: white;
+}
+
+td {
+    background-color: #ecf0f1;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button:active {
+    background-color: #1f5b82;
+}
+
+button:focus {
+    outline: none;
+}
+
+button i {
+    margin-right: 8px;
+}
+
+canvas {
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#result {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    color: #27ae60;
+}
+
+#data-table {
+    margin-top: 30px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    button {
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <h1>Median Kelompok Calculator</h1>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Nilai</th>
+                <th>Frekuensi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be loaded dynamically -->
+        </tbody>
+    </table>
+
+    <button class="button" onclick="addRow()">
+        <i class="fas fa-plus"></i> Tambah Baris
+    </button>
+    <button class="button" onclick="removeLastRow()">
+        <i class="fas fa-minus"></i> Hapus Baris Terakhir
+    </button>
+    <button class="button" onclick="calculateMedian()">
+        <i class="fas fa-calculator"></i> Hitung Median
+    </button>
+    <button class="button" onclick="resetTable()">
+        <i class="fas fa-redo"></i> Reset
+    </button>
+
+    <h2>Hasil</h2>
+    <p id="result"></p>
+
+    <canvas id="chart" width="400" height="200"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Load table data from localStorage
+    window.onload = function () {
+        const savedData = JSON.parse(localStorage.getItem('tableData')) || [];
+        const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+
+        savedData.forEach(rowData => {
+            const newRow = table.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+
+            cell1.innerHTML = `<input type="number" class="nilai" step="0.01" value="${rowData.nilai}">`;
+            cell2.innerHTML = `<input type="number" class="frekuensi" step="1" value="${rowData.frekuensi}">`;
+        });
+
+        updateChart();
+    };
+
+    function addRow() {
+        const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+
+        cell1.innerHTML = '<input type="number" class="nilai" step="0.01">';
+        cell2.innerHTML = '<input type="number" class="frekuensi" step="1">';
+
+        saveTableData();
+        updateChart();
+
+        // Alert when a row is added
+        Swal.fire({
+            icon: 'success',
+            title: 'Baris Ditambahkan',
+            text: 'Baris baru telah berhasil ditambahkan.'
+        });
+    }
+
+    function removeLastRow() {
+        const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+        const rowCount = table.rows.length;
+        if (rowCount > 0) {
+            table.deleteRow(rowCount - 1);
+            saveTableData();
+            updateChart();
+
+            // Alert when a row is removed
+            Swal.fire({
+                icon: 'success',
+                title: 'Baris Dihapus',
+                text: 'Baris terakhir telah dihapus.'
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak ada baris untuk dihapus!'
+            });
+        }
+    }
+
+    function resetTable() {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data akan dihapus permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = '';
+                localStorage.removeItem('tableData');
+                document.getElementById('result').textContent = '';
+                updateChart();
+                Swal.fire(
+                    'Dihapus!',
+                    'Data telah direset.',
+                    'success'
+                );
+            }
+        });
+    }
+
+    function calculateMedian() {
+        const rows = document.querySelectorAll('#data-table tbody tr');
+        let totalFrekuensi = 0;
+        let data = [];
+
+        rows.forEach(row => {
+            const nilai = parseFloat(row.querySelector('.nilai').value);
+            const frekuensi = parseInt(row.querySelector('.frekuensi').value);
+
+            if (!isNaN(nilai) && !isNaN(frekuensi)) {
+                totalFrekuensi += frekuensi;
+                data.push({ nilai, frekuensi });
+            }
+        });
+
+        if (data.length === 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Data tidak valid untuk menghitung median!'
+            });
+            return;
+        }
+
+        const medianPos = totalFrekuensi / 2;
+        let cumulativeFreq = 0;
+        let median = null;
+
+        for (let i = 0; i < data.length; i++) {
+            cumulativeFreq += data[i].frekuensi;
+            if (cumulativeFreq >= medianPos) {
+                if (cumulativeFreq - data[i].frekuensi < medianPos) {
+                    median = data[i].nilai;
+                } else {
+                    const prevCumulativeFreq = cumulativeFreq - data[i].frekuensi;
+                    median = (data[i - 1].nilai + data[i].nilai) / 2;
+                }
+                break;
+            }
+        }
+
+        if (median !== null) {
+            document.getElementById('result').textContent = `Median: ${median.toFixed(2)}`;
+            Swal.fire({
+                icon: 'success',
+                title: 'Perhitungan Selesai',
+                text: `Median adalah ${median.toFixed(2)}`
+            });
+        } else {
+            document.getElementById('result').textContent = 'Gagal menghitung median.';
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Gagal menghitung median!'
+            });
+        }
+
+        saveTableData();
+        updateChart();
+    }
+
+    function saveTableData() {
+        const rows = document.querySelectorAll('#data-table tbody tr');
+        const tableData = [];
+
+        rows.forEach(row => {
+            const nilai = row.querySelector('.nilai').value;
+            const frekuensi = row.querySelector('.frekuensi').value;
+
+            if (nilai && frekuensi) {
+                tableData.push({ nilai: parseFloat(nilai), frekuensi: parseInt(frekuensi) });
+            }
+        });
+
+        localStorage.setItem('tableData', JSON.stringify(tableData));
+    }
+
+    function updateChart() {
+    const rows = document.querySelectorAll('#data-table tbody tr');
+    const labels = [];
+    const frequencies = [];
+
+    rows.forEach(row => {
+        const nilai = parseFloat(row.querySelector('.nilai').value);
+        const frekuensi = parseInt(row.querySelector('.frekuensi').value);
+
+        if (!isNaN(nilai) && !isNaN(frekuensi)) {
+            labels.push(nilai);
+            frequencies.push(frekuensi);
+        }
+    });
+
+    const ctx = document.getElementById('chart').getContext('2d');
+
+    // Check if a chart exists before destroying it
+    if (window.chart && window.chart.destroy) {
+        window.chart.destroy();  // Destroy previous chart if exists
+    }
+
+    // Create a new chart only if there is valid data
+    if (labels.length > 0 && frequencies.length > 0) {
+        window.chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Frekuensi',
+                    data: frequencies,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+}
+
+</script>
+
+</body>
+</html>

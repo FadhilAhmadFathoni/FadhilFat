@@ -5,166 +5,180 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Catatan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
         }
-
-        h1,
-        h2 {
+        
+        h1, h2 {
             text-align: center;
+            color: #333;
+            font-size: 2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
         }
-
+        
         form {
             max-width: 400px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        input,
-        textarea {
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
-            padding: 10px;
+            border: 2px solid #ddd;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
         }
-
+        
+        input:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+        
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-
+        
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
-
+        
         .notes {
             margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-
+        
         .note {
             background-color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .note h3 {
-            margin: 0;
-            color: #333;
-        }
-
-        .note p {
-            margin: 5px 0;
-        }
-
-        .note a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .note a:hover {
-            color: #0056b3;
-            /* Warna saat di-hover */
-            text-decoration: underline;
-        }
-
-        .note a:visited {
-            color: #551a8b;
-            /* Warna untuk link yang sudah dikunjungi */
-        }
-
-        .note a:active {
-            color: #ff0000;
-            /* Warna saat link aktif (diklik) */
-            text-decoration: underline;
-        }
-
+        
         .note:hover {
             transform: scale(1.05);
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
         }
-
+        
         .copy-btn {
-            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-
+        
         .copy-btn:hover {
             background-color: #218838;
+            transform: scale(1.05);
         }
-
-        /* Style untuk notifikasi */
-        .notification {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #28a745;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: opacity 0.3s ease;
-            text-align: center;
-            /* Pusatkan teks di dalam notifikasi */
-        }
-
-        .notification.show {
+        
+        #sortOrder, #searchInput {
             display: block;
-            opacity: 1;
+            margin: 10px auto;
+            width: 90%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
         }
-        #backButton {
-    padding: 10px 20px;
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: block;
-    text-align: center;
-}
-
-#backButton:hover {
-    background-color: #5a6268;
-}
+        
+        .visit-btn {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .visit-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        /* Responsif Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        
+            form {
+                padding: 15px;
+            }
+        
+            .note {
+                padding: 15px;
+            }
+        
+            button, .copy-btn, .visit-btn {
+                width: 100%;
+            }
+        
+            .copy-btn, .visit-btn {
+                justify-content: center;
+            }
+        }
+        
 
     </style>
+    
+</head>
 
-    <!-- Firebase SDK -->
+<body>
+    <h1>Catatan</h1>
+    <h2>Website buatan Fadhil Fathoni</h2>
+    <form id="noteForm">
+        <input type="text" id="title" placeholder="Judul" required />
+        <input type="text" id="name" placeholder="Nama (opsional)" />
+        <textarea id="description" placeholder="Deskripsi" required></textarea>
+        <input type="url" id="link" placeholder="Link (opsional)" />
+        <button type="submit"><i class="fas fa-save"></i> Simpan Catatan</button>
+    </form>
+
+    <select id="sortOrder">
+        <option value="newest">Terbaru</option>
+        <option value="oldest">Terlama</option>
+    </select>
+
+    <input type="text" id="searchInput" placeholder="Cari catatan..." />
+    <div class="notes" id="notesContainer"></div>
+
     <script type="module">
-        // Firebase initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import {
-            getDatabase,
-            ref,
-            set,
-            push,
-            onValue,
-        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBTw6gc6SbmZCcc2wTI3sK24SCx0OFrdgI",
@@ -174,13 +188,12 @@
             storageBucket: "cocok-f9c04.appspot.com",
             messagingSenderId: "89712979326",
             appId: "1:89712979326:web:b7f9072b49f926e7b9172f",
-            measurementId: "G-MLE01YFPZ9",
+            measurementId: "G-MLE01YFPZ9"
         };
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Function to add new note
         function tambahCatatan(judul, nama, deskripsi, link) {
             const catatanRef = ref(database, "notes");
             const newCatatanRef = push(catatanRef);
@@ -190,75 +203,69 @@
                 description: deskripsi,
                 link: link || "",
             });
+            Swal.fire("Berhasil!", "Catatan berhasil disimpan!", "success");
         }
 
-        // Function to copy description to clipboard
-        window.salinDeskripsi = function (deskripsi) {
-            if (navigator.clipboard) {
-                navigator.clipboard
-                    .writeText(deskripsi)
-                    .then(() => {
-                        showCopyNotification();
-                    })
-                    .catch((err) => {
-                        console.error("Gagal menyalin deskripsi:", err);
-                    });
-            } else {
-                alert("Browser Anda tidak mendukung fungsi clipboard.");
-            }
-        };
-
-        // Function to display saved notes
-        function tampilkanCatatan() {
+        function tampilkanCatatan(order = "newest") {
             const notesContainer = document.getElementById("notesContainer");
             const catatanRef = ref(database, "notes");
+
             onValue(catatanRef, (snapshot) => {
-                notesContainer.innerHTML = ""; // Bersihkan konten sebelumnya
+                notesContainer.innerHTML = "";
                 const data = snapshot.val();
                 if (data) {
-                    // Iterasi data dengan urutan terbalik
-                    Object.keys(data)
-                        .reverse()
-                        .forEach((key) => {
-                            const catatan = data[key];
-                            notesContainer.innerHTML += `<div class="note">
-            <h3>${catatan.title}</h3>
-            <p><strong>Oleh:</strong> ${catatan.name}</p>
-            <p>${catatan.description}</p>
-            ${catatan.link
-                                    ? `<p><a href="${catatan.link}" target="_blank">Kunjungi Link</a></p>`
-                                    : ""
-                                }
-            <button class="copy-btn" onclick="salinDeskripsi('${catatan.description
-                                }')">Salin Deskripsi</button>
-        </div>`;
-                        });
+                    let catatanArray = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+
+                    // Urutkan berdasarkan order
+                    catatanArray.sort((a, b) => {
+                        if (order === "newest") {
+                            return b.id.localeCompare(a.id); // Terbaru di atas
+                        } else {
+                            return a.id.localeCompare(b.id); // Terlama di atas
+                        }
+                    });
+
+                    catatanArray.forEach(catatan => {
+                        notesContainer.innerHTML += createNoteHTML(catatan);
+                    });
                 } else {
-                    notesContainer.innerHTML =
-                        "<p>Tidak ada catatan yang tersimpan.</p>";
+                    notesContainer.innerHTML = "<p>Tidak ada catatan yang tersimpan.</p>";
                 }
             });
         }
 
-        // Function to show notification when copying description
-        function showCopyNotification() {
-            const notification = document.getElementById("copyNotification");
-            notification.classList.add("show");
-            setTimeout(() => {
-                notification.classList.remove("show");
-            }, 3000); // Hide after 3 seconds
-        }
-        function showSaveNotification() {
-            const notification = document.getElementById("saveNotification");
-            notification.classList.add("show");
-            setTimeout(() => {
-                notification.classList.remove("show");
-            }, 3000); // Sembunyikan setelah 3 detik
-        }
+        function createNoteHTML(catatan) {
+    return `
+        <div class="note" id="${catatan.id}">
+            <h3>${catatan.title}</h3>
+            <p><strong>Oleh:</strong> ${catatan.name}</p>
+            <p>${catatan.description}</p>
+            ${catatan.link ? `<button class="visit-btn" onclick="window.open('${catatan.link}', '_blank')">Kunjungi Link</button>` : ""}
+            <button class="copy-btn" onclick="salinDeskripsi('${catatan.description}')"><i class="fas fa-copy"></i> Salin Deskripsi</button>
+        </div>`;
+}
 
-        // Event listener for form submit
+
+        window.salinDeskripsi = function (deskripsi) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(deskripsi).then(() => {
+                    Swal.fire("Berhasil!", "Deskripsi berhasil disalin ke clipboard!", "success");
+                }).catch((err) => {
+                    console.error("Gagal menyalin deskripsi:", err);
+                    Swal.fire("Error!", "Gagal menyalin deskripsi.", "error");
+                });
+            } else {
+                Swal.fire("Error!", "Browser Anda tidak mendukung fungsi clipboard.", "error");
+            }
+        };
+
         document.addEventListener("DOMContentLoaded", () => {
             const noteForm = document.getElementById("noteForm");
+            const sortOrder = document.getElementById("sortOrder");
+
             noteForm.addEventListener("submit", (e) => {
                 e.preventDefault();
                 const title = document.getElementById("title").value;
@@ -266,44 +273,30 @@
                 const description = document.getElementById("description").value;
                 const link = document.getElementById("link").value;
 
-                // Add note to Firebase
                 tambahCatatan(title, name, description, link);
-
-                showSaveNotification();
-
-                // Clear form after submit
                 noteForm.reset();
             });
-            document.getElementById("backButton").addEventListener("click", () => {
-    window.location.href = "../index.html"
-});
 
+            sortOrder.addEventListener("change", (e) => {
+                tampilkanCatatan(e.target.value);
+            });
 
-            // Display saved notes
             tampilkanCatatan();
         });
+
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            const searchQuery = e.target.value.toLowerCase();
+            const notes = document.querySelectorAll(".note");
+            notes.forEach((note) => {
+                const title = note.querySelector("h3").innerText.toLowerCase();
+                if (title.includes(searchQuery)) {
+                    note.style.display = "block";
+                } else {
+                    note.style.display = "none";
+                }
+            });
+        });
     </script>
-</head>
-
-<body>
-    <button id="backButton">Kembali</button>
-    <h1>Catatan</h1>
-    <h2>Website buatan Fadhil Fathoni</h2>
-    <div id="saveNotification" class="notification">
-        Catatan berhasil disimpan!
-    </div>
-    <div id="copyNotification" class="notification">
-        Deskripsi berhasil disalin ke clipboard!
-    </div>
-    <form id="noteForm">
-        <input type="text" id="title" placeholder="Judul" required />
-        <input type="text" id="name" placeholder="Nama (opsional)" />
-        <textarea id="description" placeholder="Deskripsi" required></textarea>
-        <input type="url" id="link" placeholder="Link (opsional)" />
-        <button type="submit">Simpan Catatan</button>
-    </form>
-
-    <div class="notes" id="notesContainer"></div>
 </body>
 
 </html>
