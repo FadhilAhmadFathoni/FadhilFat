@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Foto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .upload-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #image-preview {
+            margin-top: 20px;
+            display: none;
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h2>Upload Foto Anda</h2>
+        <input type="file" id="file-input" accept="image/*">
+        <div id="image-preview-container">
+            <img id="image-preview" src="" alt="Image Preview">
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const imagePreview = document.getElementById('image-preview');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
