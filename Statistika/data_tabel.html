@@ -18,12 +18,13 @@
             margin-bottom: 30px;
         }
         table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        border-radius: 8px; /* Memberikan sudut melengkung */
         }
         table, th, td {
             border: 1px solid #ddd;
@@ -31,19 +32,26 @@
         th, td {
             padding: 12px;
             text-align: center;
+            text-transform: uppercase; /* Huruf kapital untuk header */
         }
         th {
             background-color: #4e73df;
             color: white;
         }
         td input {
-            width: 80px;
+            width: 100%;
             padding: 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
             text-align: center;
+            box-sizing: border-box;
+            transition: box-shadow 0.3s ease; /* Efek bayangan ketika fokus */
         }
+        td input:focus {
+    box-shadow: 0 0 8px rgba(72, 137, 242, 0.5); /* Efek fokus */
+    border-color: #4e73df;
+}
         table tbody tr:hover {
             background-color: #f1f1f1;
             transform: scale(1.02);
@@ -63,6 +71,10 @@
         button:hover {
             background-color: #2e59d9;
             transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan */
+        }
+        button[active]{
+            transform: scale(0.95); /* Menambahkan efek mengecil saat ditekan */
         }
         button[disabled] {
             background-color: #e0e0e0;
@@ -82,9 +94,14 @@
             font-size: 0.9rem;
         }
         #chartContainer {
-            width: 80%;
-            margin: 30px auto;
-        }
+    width: 90%;
+    margin: 30px auto;
+}
+#myChart {
+    max-width: 100%;
+    height: auto; /* Sesuaikan tinggi dengan lebar */
+}
+
         #hasil, #totalFrekuensi {
             text-align: center;
             font-size: 1.2rem;
@@ -121,14 +138,23 @@
             transform: rotate(10deg);
         }
         @media (max-width: 768px) {
-            table {
-                width: 100%;
-            }
-            button {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
+    table {
+        width: 100%;
+        font-size: 0.9rem; /* Ukuran font lebih kecil untuk tampilan mobile */
+    }
+    td input {
+        font-size: 1rem; /* Ukuran input lebih besar di layar kecil */
+    }
+    .button-container {
+        flex-direction: column; /* Susun tombol secara vertikal */
+        gap: 10px;
+    }
+    .card {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
     </style>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -240,46 +266,94 @@
         }
 
         function hitungRataRata() {
-            const nilaiElements = document.getElementsByClassName('nilai');
-            const frekuensiElements = document.getElementsByClassName('frekuensi');
+        const nilaiElements = document.getElementsByClassName('nilai');
+        const frekuensiElements = document.getElementsByClassName('frekuensi');
 
-            let totalFrekuensi = 0;
-            let totalNilai = 0;
-            const labels = [];
-            const data = [];
+        let totalFrekuensi = 0;
+        let totalNilai = 0;
+        const dataList = []; // Untuk menghitung median dan modus
+        const labels = [];
+        const data = [];
 
-            for (let i = 0; i < nilaiElements.length; i++) {
-                const nilai = parseFloat(nilaiElements[i].value);
-                const frekuensi = parseInt(frekuensiElements[i].value);
+        for (let i = 0; i < nilaiElements.length; i++) {
+            const nilai = parseFloat(nilaiElements[i].value);
+            const frekuensi = parseInt(frekuensiElements[i].value);
 
-                if (isNaN(nilai) || isNaN(frekuensi) || nilai <= 0 || frekuensi <= 0) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Input Tidak Valid!',
-                        text: 'Nilai dan Frekuensi harus lebih besar dari 0.',
-                    });
-                    return;
-                }
-
-                totalFrekuensi += frekuensi;
-                totalNilai += nilai * frekuensi;
-                labels.push(nilai); // Nilai sebagai label
-                data.push(frekuensi); // Frekuensi sebagai data
+            if (isNaN(nilai) || isNaN(frekuensi) || nilai <= 0 || frekuensi <= 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Input Tidak Valid!',
+                    text: 'Nilai dan Frekuensi harus lebih besar dari 0.',
+                });
+                return;
             }
 
-            const rataRata = totalNilai / totalFrekuensi;
-            document.getElementById('hasil').innerText = 'Rata-rata Nilai Kelompok: ' + rataRata.toFixed(2);
-            document.getElementById('totalFrekuensi').innerText = 'Total Frekuensi: ' + totalFrekuensi;
+            totalFrekuensi += frekuensi;
+            totalNilai += nilai * frekuensi;
 
-            // Menampilkan grafik
-            showChart(labels, data);
+            // Tambahkan nilai sesuai frekuensi ke dataList
+            for (let j = 0; j < frekuensi; j++) {
+                dataList.push(nilai);
+            }
 
-            Swal.fire({
-                icon: 'info',
-                title: 'Perhitungan Selesai!',
-                text: 'Rata-rata: ' + rataRata.toFixed(2) + ' | Total Frekuensi: ' + totalFrekuensi,
-            });
+            labels.push(nilai); // Nilai sebagai label
+            data.push(frekuensi); // Frekuensi sebagai data
         }
+
+        const rataRata = totalNilai / totalFrekuensi;
+        const median = hitungMedian(dataList);
+        const modus = hitungModus(dataList);
+        const jangkauan = hitungJangkauan(dataList);
+
+        document.getElementById('hasil').innerHTML = `
+            <p>Rata-rata: <b>${rataRata.toFixed(2)}</b></p>
+            <p>Median: <b>${median}</b></p>
+            <p>Modus: <b>${modus}</b></p>
+            <p>Jangkauan: <b>${jangkauan}</b></p>
+        `;
+        document.getElementById('totalFrekuensi').innerText = 'Total Frekuensi: ' + totalFrekuensi;
+
+        // Menampilkan grafik
+        showChart(labels, data);
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Perhitungan Selesai!',
+            html: `
+                <p>Rata-rata: ${rataRata.toFixed(2)}</p>
+                <p>Median: ${median}</p>
+                <p>Modus: ${modus}</p>
+                <p>Jangkauan: ${jangkauan}</p>
+            `,
+        });
+    }
+
+    function hitungMedian(data) {
+        data.sort((a, b) => a - b); // Urutkan data
+        const n = data.length;
+        if (n % 2 === 1) {
+            return data[Math.floor(n / 2)];
+        } else {
+            return (data[n / 2 - 1] + data[n / 2]) / 2;
+        }
+    }
+
+    function hitungModus(data) {
+        const frekuensi = {};
+        data.forEach(num => {
+            frekuensi[num] = (frekuensi[num] || 0) + 1;
+        });
+
+        const maxFrekuensi = Math.max(...Object.values(frekuensi));
+        const modus = Object.keys(frekuensi).filter(num => frekuensi[num] === maxFrekuensi);
+        return modus.join(', ');
+    }
+
+    function hitungJangkauan(data) {
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        return max - min;
+    }
 
         function showChart(labels, data) {
             const ctx = document.getElementById('myChart').getContext('2d');
