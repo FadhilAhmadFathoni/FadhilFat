@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukuran Gambar</title>
+    <style>
+        img{
+            height: 500px;
+            width: 500px;
+            object-fit: cover;
+            filter: grayscale(1);
+            transition: transform 0.3s ease, filter 0.3 ease;
+        }
+        img:hover{
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+        .scroll-container {
+    width: 100%; /* Menentukan lebar kontainer (bisa disesuaikan) */
+    overflow-x: auto; /* Mengaktifkan scroll horizontal */
+    white-space: nowrap; /* Mengatur gambar tetap dalam satu baris */
+    padding: 10px 0; /* Menambahkan sedikit ruang di sekitar gambar */
+}
+
+.scroll-container img {
+    height: 500px; /* Sesuaikan ukuran gambar */
+    margin-right: 10px; /* Menambahkan jarak antar gambar */
+}
+
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <img src="https://i.pinimg.com/736x/ca/c3/78/cac3788b0b83d397f968dbc8b5613aa5.jpg" alt="Kucing">
+        <img src="https://i.pinimg.com/236x/cf/b1/13/cfb1131f9a4fd6f89fa75783699d8074.jpg" alt="">
+        <img src="https://i.pinimg.com/236x/6d/42/db/6d42db718f81a55e67d62935f2ff04b5.jpg" alt="">
+        <img src="https://i.pinimg.com/474x/6e/08/19/6e0819c727420ef42c1e6b587b57e335.jpg" alt="">
+    </div>
+    <script>
+        const img = new Image();
+        img.onload = function() {
+            console.log("Lebar: " + img.width + "px");
+            console.log("Tinggi: " + img.height + "px");
+        };
+        img.src = "https://i.pinimg.com/736x/ca/c3/78/cac3788b0b83d397f968dbc8b5613aa5.jpg";
+    </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catatan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            border: 2px solid #ddd;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+        
+        button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        .notes {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .note {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .note:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .copy-btn, .delete-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+        }
+        
+        .copy-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+        
+        #sortOrder, #searchInput {
+            display: block;
+            margin: 10px auto;
+            width: 90%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .visit-btn {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .visit-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        /* Responsif Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        
+            form {
+                padding: 15px;
+            }
+        
+            .note {
+                padding: 15px;
+            }
+        
+            button, .copy-btn, .visit-btn {
+                width: 100%;
+            }
+        
+            .copy-btn, .visit-btn {
+                justify-content: center;
+            }
+        }
+        
+
+    </style>
+    
+</head>
+
+<body>
+    <h1>Catatan</h1>
+    <h2>Website buatan Fadhil Fathoni</h2>
+    <form id="noteForm">
+        <input type="text" id="title" placeholder="Judul" required />
+        <input type="text" id="name" placeholder="Nama (opsional)" />
+        <textarea id="description" placeholder="Deskripsi" required></textarea>
+        <input type="url" id="link" placeholder="Link (opsional)" />
+        <button type="submit"><i class="fas fa-save"></i> Simpan Catatan</button>
+    </form>
+
+    <select id="sortOrder">
+        <option value="newest">Terbaru</option>
+        <option value="oldest">Terlama</option>
+    </select>
+
+    <input type="text" id="searchInput" placeholder="Cari catatan..." />
+    <div class="notes" id="notesContainer"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTw6gc6SbmZCcc2wTI3sK24SCx0OFrdgI",
+            authDomain: "cocok-f9c04.firebaseapp.com",
+            databaseURL: "https://cocok-f9c04-default-rtdb.firebaseio.com",
+            projectId: "cocok-f9c04",
+            storageBucket: "cocok-f9c04.appspot.com",
+            messagingSenderId: "89712979326",
+            appId: "1:89712979326:web:b7f9072b49f926e7b9172f",
+            measurementId: "G-MLE01YFPZ9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        function tambahCatatan(judul, nama, deskripsi, link) {
+            const catatanRef = ref(database, "notes");
+            const newCatatanRef = push(catatanRef);
+            set(newCatatanRef, {
+                title: judul,
+                name: nama || "Anonim",
+                description: deskripsi,
+                link: link || "",
+            });
+            Swal.fire("Berhasil!", "Catatan berhasil disimpan!", "success");
+        }
+
+        function hapusCatatan(id) {
+            Swal.fire({
+                title: "Yakin ingin menghapus catatan?",
+                text: "Catatan yang dihapus tidak dapat dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const catatanRef = ref(database, `notes/${id}`);
+                    remove(catatanRef)
+                        .then(() => Swal.fire("Terhapus!", "Catatan berhasil dihapus.", "success"))
+                        .catch((err) => Swal.fire("Error!", "Terjadi kesalahan saat menghapus catatan.", "error"));
+                }
+            });
+        }
+window.hapusCatatan = hapusCatatan;
+
+        function tampilkanCatatan(order = "newest") {
+            const notesContainer = document.getElementById("notesContainer");
+            const catatanRef = ref(database, "notes");
+
+            onValue(catatanRef, (snapshot) => {
+                notesContainer.innerHTML = "";
+                const data = snapshot.val();
+                if (data) {
+                    let catatanArray = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+
+                    // Urutkan berdasarkan order
+                    catatanArray.sort((a, b) => {
+                        if (order === "newest") {
+                            return b.id.localeCompare(a.id); // Terbaru di atas
+                        } else {
+                            return a.id.localeCompare(b.id); // Terlama di atas
+                        }
+                    });
+
+                    catatanArray.forEach(catatan => {
+                        notesContainer.innerHTML += createNoteHTML(catatan);
+                    });
+                } else {
+                    notesContainer.innerHTML = "<p>Tidak ada catatan yang tersimpan.</p>";
+                }
+            });
+        }
+
+        function createNoteHTML(catatan) {
+            return `
+                <div class="note" id="${catatan.id}">
+                    <h3>${catatan.title}</h3>
+                    <p><strong>Oleh:</strong> ${catatan.name}</p>
+                    <p>${catatan.description}</p>
+                    ${catatan.link ? `<button class="visit-btn" onclick="window.open('${catatan.link}', '_blank')">Kunjungi Link</button>` : ""}
+                    <button class="copy-btn" onclick="salinDeskripsi('${catatan.description}')"><i class="fas fa-copy"></i> Salin Deskripsi</button>
+                    <button class="delete-btn" onclick="hapusCatatan('${catatan.id}')"><i class="fas fa-trash"></i> Hapus</button>
+                </div>`;
+        }
+
+        window.salinDeskripsi = function (deskripsi) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(deskripsi).then(() => {
+                    Swal.fire("Berhasil!", "Deskripsi berhasil disalin ke clipboard!", "success");
+                }).catch((err) => {
+                    console.error("Gagal menyalin deskripsi:", err);
+                    Swal.fire("Error!", "Gagal menyalin deskripsi.", "error");
+                });
+            } else {
+                Swal.fire("Error!", "Browser Anda tidak mendukung fungsi clipboard.", "error");
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const noteForm = document.getElementById("noteForm");
+            const sortOrder = document.getElementById("sortOrder");
+
+            noteForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const title = document.getElementById("title").value;
+                const name = document.getElementById("name").value;
+                const description = document.getElementById("description").value;
+                const link = document.getElementById("link").value;
+
+                tambahCatatan(title, name, description, link);
+                noteForm.reset();
+            });
+
+            sortOrder.addEventListener("change", (e) => {
+                tampilkanCatatan(e.target.value);
+            });
+
+            tampilkanCatatan();
+        });
+
+        document.getElementById("searchInput").addEventListener("input", (e) => {
+            const searchQuery = e.target.value.toLowerCase();
+            const notes = document.querySelectorAll(".note");
+            notes.forEach((note) => {
+                const title = note.querySelector("h3").innerText.toLowerCase();
+                if (title.includes(searchQuery)) {
+                    note.style.display = "block";
+                } else {
+                    note.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

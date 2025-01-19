@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konversi Gram ke Uang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Konversi Gram ke Uang</h2>
+        <label for="pricePerKg">Harga per Kilogram (Rp):</label>
+        <input type="number" id="pricePerKg" placeholder="Contoh: 100000" />
+
+        <label for="inputValue">Masukkan Gram atau Uang:</label>
+        <input type="number" id="inputValue" placeholder="Contoh: 25000 atau 500" />
+
+        <button onclick="convertToMoney()">Hitung Uang dari Gram</button>
+        <button onclick="convertToGram()">Hitung Gram dari Uang</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function formatNumber(value) {
+            // Jika nilai adalah bilangan bulat, tampilkan tanpa desimal
+            return Number.isInteger(value) ? value.toString() : value.toFixed(2);
+        }
+
+        function convertToMoney() {
+            const pricePerKg = parseFloat(document.getElementById("pricePerKg").value);
+            const grams = parseFloat(document.getElementById("inputValue").value);
+
+            if (isNaN(pricePerKg) || isNaN(grams) || pricePerKg <= 0 || grams <= 0) {
+                document.getElementById("result").innerText = "Masukkan nilai yang valid.";
+                return;
+            }
+
+            const pricePerGram = pricePerKg / 1000;
+            const totalCost = grams * pricePerGram;
+
+            document.getElementById("result").innerText = `Harga untuk ${formatNumber(grams)} gram adalah Rp${formatNumber(totalCost)}`;
+        }
+
+        function convertToGram() {
+            const pricePerKg = parseFloat(document.getElementById("pricePerKg").value);
+            const money = parseFloat(document.getElementById("inputValue").value);
+
+            if (isNaN(pricePerKg) || isNaN(money) || pricePerKg <= 0 || money <= 0) {
+                document.getElementById("result").innerText = "Masukkan nilai yang valid.";
+                return;
+            }
+
+            const pricePerGram = pricePerKg / 1000; // Harga per gram
+            const grams = money / pricePerGram; // Jumlah gram yang bisa dibeli
+
+            document.getElementById("result").innerText = `Dengan Rp${formatNumber(money)}, kamu bisa membeli ${formatNumber(grams)} gram.`;
+        }
+    </script>
+</body>
+</html>
