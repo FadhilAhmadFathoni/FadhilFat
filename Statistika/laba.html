@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitung Laba dan Persentase Keuntungan</title>
+    <style>
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    margin: 20px;
+    color: #333;
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #4e73df;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Kontainer Utama */
+.container {
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 12px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Grup Input */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Efek focus pada input */
+.input-group input:focus + label {
+    color: #4e73df;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #4e73df;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(78, 115, 223, 0.5);
+}
+
+.input-group input:not(:focus) {
+    transition: box-shadow 0.3s ease;
+}
+
+.input-group input:hover {
+    border-color: #4e73df;
+    cursor: pointer;
+}
+
+/* Tooltip hover pada input */
+.input-group input:hover::after {
+    content: "Masukkan data Anda di sini!";
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.input-group input:focus::after {
+    visibility: hidden;
+}
+
+/* Efek hover pada label */
+.input-group label:hover {
+    color: #2e59d9;
+    cursor: pointer;
+    transform: translateY(-3px);
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Tombol */
+button {
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #2e59d9;
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    background-color: #1b3ea5;
+}
+
+/* Hasil */
+.result {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Grafik */
+#myChart:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+
+/* Responsif */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .result {
+        font-size: 1.1rem;
+    }
+}
+
+    </style>
+    <!-- Tambahkan Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <h2>Hitung Laba dan Persentase Keuntungan</h2>
+    
+    <div class="container">
+        <div class="input-group">
+            <label for="hargaBeli">Harga Beli</label>
+            <input type="text" id="hargaBeli" placeholder="Masukkan harga beli" oninput="formatInput(this)">
+        </div>
+        
+        <div class="input-group">
+            <label for="hargaJual">Harga Jual</label>
+            <input type="text" id="hargaJual" placeholder="Masukkan harga jual" oninput="formatInput(this)">
+        </div>
+
+        <button onclick="hitungKeuntungan()">Hitung Keuntungan</button>
+
+        <div id="result" class="result"></div>
+
+        <!-- Tempat untuk grafik batang -->
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+       let myChartInstance = null; // Variabel global untuk menyimpan instance Chart
+
+// Format input harga untuk menambah 'Rp' dan titik setiap 3 digit
+function formatInput(input) {
+    let value = input.value.replace(/[^\d]/g, ''); // Menghapus karakter non-digit
+    if (value.length > 0) {
+        value = 'Rp ' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Menambahkan titik
+    }
+    input.value = value;
+}
+
+// Fungsi untuk menghitung laba dan menampilkan grafik
+function hitungKeuntungan() {
+    let hargaBeli = document.getElementById("hargaBeli").value.replace(/[^\d]/g, '');
+    let hargaJual = document.getElementById("hargaJual").value.replace(/[^\d]/g, '');
+
+    hargaBeli = parseFloat(hargaBeli);
+    hargaJual = parseFloat(hargaJual);
+
+    if (isNaN(hargaBeli) || isNaN(hargaJual) || hargaBeli <= 0 || hargaJual <= 0) {
+        document.getElementById("result").innerHTML = "Masukkan harga yang valid!";
+        return;
+    }
+
+    // Hitung laba
+    const laba = hargaJual - hargaBeli;
+
+    // Hitung persentase keuntungan
+    const persentaseKeuntungan = (laba / hargaBeli) * 100;
+
+    // Tampilkan hasil
+    document.getElementById("result").innerHTML = `
+        Laba: Rp. ${laba.toLocaleString()} <br>
+        Keuntungan: ${persentaseKeuntungan.toFixed(2)}%
+    `;
+
+    // Hancurkan chart sebelumnya jika ada
+    if (myChartInstance) {
+        myChartInstance.destroy();
+    }
+
+    // Menampilkan grafik batang
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const data = {
+        labels: ['Harga Beli', 'Harga Jual', 'Laba'],
+        datasets: [{
+            label: 'Perbandingan Harga Beli, Harga Jual, dan Laba',
+            data: [hargaBeli, hargaJual, laba],
+            backgroundColor: ['#4e73df', '#1cc88a', '#f6c23e'],
+            borderWidth: 1
+        }]
+    };
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'Rp. ' + value.toLocaleString();
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let value = tooltipItem.raw;
+                            return 'Rp. ' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    };
+    myChartInstance = new Chart(ctx, config); // Simpan instance Chart
+}
+
+// Reset input ketika halaman dimuat
+window.onload = function() {
+    document.getElementById("hargaBeli").value = "";
+    document.getElementById("hargaJual").value = "";
+    document.getElementById("result").innerHTML = "";
+};
+
+        
+    </script>
+</body>
+</html>
