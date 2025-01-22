@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistika</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .box {
+            background-color: aquamarine;
+            height: 130px;
+            width: 130px;
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 5px;
+            overflow: hidden; /* Mencegah gambar keluar dari area box */
+            transition: all 0.3s ease;
+        }
+
+        .box:hover {
+            background-color: aqua; /* Efek hover pada box */
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Gambar sesuai dengan kotak */
+            object-position: center; /* Fokus pada tengah gambar */
+            transition: transform 0.3s ease, filter 0.3s ease; /* Smooth zoom in */
+        }
+
+        img:hover {
+            transform: scale(1.5); /* Efek zoom in */
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 14px;
+            text-align: center;
+        }
+        a {
+    text-decoration: none; /* Menghapus garis bawah */
+    color: inherit; /* Warna mengikuti elemen di dalamnya */
+}
+
+    </style>
+</head>
+
+<body>
+    <a href="data_tunggal.html">
+    <div class="box">
+        <img src="https://i.pinimg.com/736x/e1/4c/e6/e14ce642149ec3bf25e2e4cf0dbe09d2.jpg" alt="Data Tunggal">
+        <h3>Data Tunggal</h3>
+    </div>
+</a>
+<a href="data_tabel.html">
+    <div class="box">
+        <img src="https://i.pinimg.com/236x/e5/e0/b0/e5e0b0294b80fc1cad02eb117b051308.jpg" alt="Data Tabel">
+        <h3>Data Tabel</h3>
+    </div>
+</a>
+<a href="kasir.html">
+    <div class="box">
+        <img src="https://i.pinimg.com/736x/c6/ac/e0/c6ace02641f8a676271e641b18dd95a3.jpg" alt="Kasir">
+        <h3>Kasir</h3>
+    </div>
+</a>
+<a href="laba.html">
+    <div class="box">
+        <img src="https://i.pinimg.com/474x/12/9f/a2/129fa2861b8ea90c17d6e381f635e86a.jpg" alt="Laba">
+        <h3>Laba</h3>
+    </div>
+</a>
+</body>
+
+</html>

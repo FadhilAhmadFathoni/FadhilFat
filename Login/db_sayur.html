@@ -234,31 +234,65 @@
         const formatRupiah = (angka) => 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
         // Create or Update data
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const namaBarang = form.namaBarang.value.trim();
-            const harga = parseInt(form.harga.value.trim(), 10);
-            const key = form.key.value;
+        const hargaInput = form.harga;
 
-            if (key) {
-                update(ref(db, `sayur/${key}`), { namaBarang, harga }).then(() => {
-                    Swal.fire(
-                        'Berhasil!',
-                        'Data barang telah diperbarui.',
-                        'success'
-                    );
-                });
-            } else {
-                push(dbRef, { namaBarang, harga }).then(() => {
-                    Swal.fire(
-                        'Berhasil!',
-                        'Data barang telah ditambahkan.',
-                        'success'
-                    );
-                });
-            }
-            form.reset();
+// Format angka menjadi format rupiah dengan titik setelah 3 digit
+const formatInputRupiah = (angka) => {
+    const numberString = angka.replace(/[^,\d]/g, '').toString();
+    const split = numberString.split(',');
+    const sisa = split[0].length % 3;
+    let rupiah = split[0].substr(0, sisa);
+    const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        const separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+};
+
+// Event untuk memformat harga saat pengguna mengetik
+hargaInput.addEventListener('input', () => {
+    const unformattedValue = hargaInput.value.replace(/\./g, ''); // Hapus titik sebelum format ulang
+    hargaInput.value = formatInputRupiah(unformattedValue);
+});
+
+// Pastikan nilai harga tetap valid (dalam bentuk angka) saat dikirim ke database
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const namaBarang = form.namaBarang.value.trim();
+    const harga = parseInt(hargaInput.value.replace(/\./g, ''), 10); // Hapus titik sebelum parsing
+    const key = form.key.value;
+
+    if (key) {
+        update(ref(db, `sayur/${key}`), { namaBarang, harga }).then(() => {
+            Swal.fire(
+                'Berhasil!',
+                'Data barang telah diperbarui.',
+                'success'
+            );
         });
+    } else {
+        push(dbRef, { namaBarang, harga }).then(() => {
+            Swal.fire(
+                'Berhasil!',
+                'Data barang telah ditambahkan.',
+                'success'
+            );
+        });
+    }
+    form.reset();
+});
+
+// Edit data
+window.editData = (key, namaBarang, harga) => {
+    toggleBox(); // Pastikan box terbuka
+    form.key.value = key;
+    form.namaBarang.value = namaBarang;
+    form.harga.value = harga; // Langsung masukkan nilai numerik
+};
+
 
         // Toggle box
         function toggleBox() {
@@ -268,22 +302,22 @@
         window.toggleBox=toggleBox;
 
         // Read data
-        onValue(dbRef, (snapshot) => {
-            tableBody.innerHTML = '';
-            snapshot.forEach((childSnapshot) => {
-                const key = childSnapshot.key;
-                const data = childSnapshot.val();
-                tableBody.innerHTML += `
-                    <tr>
-                        <td>${data.namaBarang}</td>
-                        <td>${formatRupiah(data.harga)}</td>
-                        <td class="actions">
-                            <button onclick="editData('${key}', '${data.namaBarang}', '${data.harga}')" class="edit-icon">✏️</button>
-                            <button onclick="confirmDelete('${key}')" class="delete-icon">🗑️</button>
-                        </td>
-                    </tr>`;
-            });
-        });
+onValue(dbRef, (snapshot) => {
+    tableBody.innerHTML = '';
+    snapshot.forEach((childSnapshot) => {
+        const key = childSnapshot.key;
+        const data = childSnapshot.val();
+        tableBody.innerHTML += `
+            <tr>
+                <td>${data.namaBarang}</td>
+                <td>${formatRupiah(data.harga)}</td> <!-- Format nilai ke Rupiah -->
+                <td class="actions">
+                    <button onclick="editData('${key}', '${data.namaBarang}', ${data.harga})" class="edit-icon">✏️</button>
+                    <button onclick="confirmDelete('${key}')" class="delete-icon">🗑️</button>
+                </td>
+            </tr>`;
+    });
+});
 
         // SweetAlert2 untuk konfirmasi Hapus
         window.confirmDelete = (key) => {

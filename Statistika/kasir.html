@@ -15,13 +15,11 @@
             background-color: #fcaba0;
             color: #333;
         }
-
         h1 {
             text-align: center;
             color: #333;
             margin-top: 20px;
         }
-
         /* Button Kembali */
         button.back {
             padding: 12px 25px;
@@ -34,17 +32,14 @@
             transition: background-color 0.3s ease;
             margin: 20px;
         }
-
         button.back:hover {
             background-color: #0056b3;
         }
-
         /* Center Add Button */
         .center-container {
             text-align: center;
             margin-top: 30px;
         }
-
         button.add {
             padding: 12px 30px;
             background-color: #28a745;
@@ -57,17 +52,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
-
         button.add:hover {
             background-color: #218838;
             transform: scale(1.05);
         }
-
         /* Hidden Box */
         .hidden {
             display: none;
         }
-
         .tambah_db {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -78,35 +70,29 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .tambah_db:hover {
             transform: scale(1.03);
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
         }
-
         form {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
         label {
             font-weight: bold;
             color: #555;
         }
-
         input {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 14px;
         }
-
         input:focus {
             border-color: #007bff;
             outline: none;
         }
-
         button[type="submit"] {
             padding: 12px 20px;
             background-color: #28a745;
@@ -118,11 +104,9 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         button[type="submit"]:hover {
             background-color: #218838;
         }
-
         /* Table Styles */
         table {
             width: 100%;
@@ -131,22 +115,18 @@
             background-color: white;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         th,
         td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
         }
-
         th {
             background-color: #f8f9fa;
         }
-
         tr:hover {
             background-color: #f1f1f1;
         }
-
         /* Actions */
         .actions button {
             padding: 8px;
@@ -155,55 +135,195 @@
             cursor: pointer;
             transition: transform 0.2s ease, color 0.2s ease;
         }
-
         .actions button:hover {
             transform: scale(1.2);
         }
-
         .actions .edit-icon {
             color: #ffc107;
         }
-
         .actions .delete-icon {
             color: #dc3545;
         }
-
+        .change-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+            /* Hijau */
+            margin-top: 10px;
+            background-color: #f8f9fa;
+            /* Abu-abu terang */
+            padding: 10px;
+            border: 2px solid #28a745;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .change-display:hover {
+            background-color: #e6f5e8;
+            /* Hijau terang */
+            transform: scale(1.05);
+        }
+        .payment-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            /* Abu-abu terang */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            /* Spasi antar elemen */
+        }
+        .payment-container label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .payment-container input {
+            flex: 1;
+            /* Membuat input mengisi ruang */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .payment-container input:focus {
+            border-color: #007bff;
+            /* Biru saat fokus */
+            outline: none;
+        }
+        .payment-container button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            /* Hijau */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .payment-container button:hover {
+            background-color: #218838;
+            /* Hijau lebih gelap saat hover */
+            transform: scale(1.05);
+            /* Sedikit memperbesar */
+        }
+        .remove-icon {
+            color: red;
+            /* Warna merah */
+            font-size: 18px;
+            /* Ukuran ikon */
+            cursor: pointer;
+            /* Tampilkan pointer saat hover */
+            transition: transform 0.2s ease, color 0.2s ease;
+            /* Animasi saat interaksi */
+        }
+        .remove-icon:hover {
+            transform: scale(1.2);
+            /* Membesar sedikit saat hover */
+            color: darkred;
+            /* Warna merah lebih gelap saat hover */
+        }
+        .add-to-cart-btn {
+            background: none;
+            /* Hilangkan background tombol */
+            border: none;
+            /* Hilangkan border tombol */
+            cursor: pointer;
+            /* Tampilkan kursor pointer saat hover */
+        }
+        .add-to-cart-btn i {
+            color: #ffc107;
+            /* Warna kuning */
+            font-size: 20px;
+            /* Ukuran ikon */
+            transition: transform 0.2s ease, color 0.2s ease;
+            /* Animasi saat interaksi */
+        }
+        .add-to-cart-btn i:hover {
+            color: #e0a800;
+            /* Warna kuning lebih gelap saat hover */
+            transform: scale(1.2);
+            /* Membesar sedikit saat hover */
+        }
+        #totalPrice {
+            padding: 20px;
+            background-color: white;
+            /* Box putih */
+            border-radius: 8px;
+            width: fit-content;
+            margin: 20px auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Bayangan halus di sekitar box */
+            border: 1px solid #ddd;
+            /* Garis tipis di sekeliling box */
+            font-size: 24px;
+            color: #4CAF50;
+            /* Warna hijau */
+            font-weight: bold;
+        }
+        #totalPrice:hover {
+            background-color: #f1f1f1;
+            /* Warna latar belakang berubah saat hover */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            /* Bayangan lebih besar */
+            border-color: #4CAF50;
+            /* Border berubah menjadi hijau */
+            cursor: pointer;
+            /* Menambahkan pointer saat hover */
+        }
+        /* CSS untuk responsif SweetAlert */
+        .swal2-popup {
+            width: 100% !important;
+            max-width: 500px;
+            /* Atur ukuran maksimum untuk tampilan besar */
+            padding: 20px;
+            box-sizing: border-box;
+        }
         @media (max-width: 768px) {
             table {
                 font-size: 14px;
             }
-
             .tambah_db {
                 padding: 25px;
             }
+            .payment-container {
+                flex-direction: column;
+                /* Elemen ditumpuk ke bawah */
+            }
+            .payment-container input,
+            .payment-container button {
+                width: 100%;
+                /* Lebar penuh */
+            }
         }
-
         @media (max-width: 480px) {
             .center-container button.add {
                 width: 90%;
                 font-size: 16px;
             }
-
             form {
                 gap: 15px;
             }
-
             input,
             button[type="submit"] {
                 font-size: 14px;
             }
-
             table {
                 font-size: 12px;
             }
         }
     </style>
 </head>
-
 <body>
     <button class="back" onclick="window.history.back()">Kembali</button>
     <h1>Kasir Sayur</h1>
-
     <table>
         <thead>
             <tr>
@@ -214,7 +334,6 @@
         </thead>
         <tbody id="tableBody"></tbody>
     </table>
-
     <h2>Keranjang Belanja</h2>
     <table>
         <thead>
@@ -231,19 +350,17 @@
     <div>
         <h3 id="totalPrice">Total: Rp. 0</h3>
     </div>
-<div>
-    <label for="paidAmount">Uang Dibayarkan:</label>
-    <input type="text" id="paidAmount" placeholder="Masukkan jumlah uang" />
-    <button id="calculateChange">Hitung Kembalian</button>
-</div>
-<div>
-    <h3 id="changeAmount">Kembalian: Rp. 0</h3>
-</div>
-
+    <div class="payment-container">
+        <label for="paidAmount">Uang Dibayarkan:</label>
+        <input type="text" id="paidAmount" placeholder="Masukkan jumlah uang" />
+        <button id="calculateChange">Hitung Kembalian</button>
+    </div>
+    <div>
+        <h3 id="changeAmount" class="change-display">Kembalian: Rp. 0</h3>
+    </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-
         const firebaseConfig = {
             apiKey: "AIzaSyBTw6gc6SbmZCcc2wTI3sK24SCx0OFrdgI",
             authDomain: "cocok-f9c04.firebaseapp.com",
@@ -253,207 +370,212 @@
             messagingSenderId: "89712979326",
             appId: "1:89712979326:web:b7f9072b49f926e7b9172f"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const dbRef = ref(db, 'sayur');
-
         const tableBody = document.getElementById('tableBody');
         const cartBody = document.getElementById('cartBody');
         const totalPrice = document.getElementById('totalPrice');
-
         const cart = [];
-
         // Format number to currency
         const formatRupiah = (angka) => 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
         // Add to cart with selection
-function addToCartWithSelection(namaBarang, hargaPerKg) {
-    Swal.fire({
-        title: `${namaBarang}
+        function addToCartWithSelection(namaBarang, hargaPerKg) {
+            Swal.fire({
+                title: `${namaBarang}
         Pilih Metode Pembelian`,
-        input: 'radio',
-        inputOptions: {
-            kg: 'Per Kilogram (kg)',
-            rupiah: 'Per Rupiah (Rp)'
-        },
-        inputValidator: (value) => {
-            if (!value) {
-                return 'Pilih salah satu metode!';
-            }
-        }
-    }).then((result) => {
-        if (result.value === 'kg') {
-            Swal.fire({
-                title: `${namaBarang} 
-                Masukkan berat dalam kilogram`,
-                input: 'number',
-                inputAttributes: {
-                    step: '0.01',
-                    min: '0'
+                input: 'radio',
+                inputOptions: {
+                    kg: 'Per Kilogram (kg)',
+                    rupiah: 'Per Rupiah (Rp)'
                 },
-                inputPlaceholder: 'Contoh: 0.25 (untuk 250 gram)',
-                showCancelButton: true
-            }).then((weightResult) => {
-                if (weightResult.value && parseFloat(weightResult.value) > 0) {
-                    const berat = parseFloat(weightResult.value);
-                    const totalHarga = berat * hargaPerKg;
-                    const item = {
-                        namaBarang,
-                        hargaSatuan: hargaPerKg,
-                        quantity: `${berat.toFixed(3)} kg`,
-                        totalHarga
-                    };
-                    cart.push(item);
-                    displayCart();
-                } else {
-                    Swal.fire('Error', 'Masukkan berat yang valid!', 'error');
-                }
-            });
-        } else if (result.value === 'rupiah') {
-            Swal.fire({
-                title: `${namaBarang} - Masukkan nominal uang (Rp)`,
-                html: `<input type="text" id="moneyInput" class="swal2-input" placeholder="Contoh: 25000" />`,
-                showCancelButton: true,
-                focusConfirm: false,
-                preConfirm: () => {
-                    const inputElement = document.getElementById('moneyInput');
-                    const rawValue = inputElement.value.replace(/[^\d]/g, ''); // Ambil hanya angka
-                    if (!rawValue || parseFloat(rawValue) <= 0) {
-                        Swal.showValidationMessage('Masukkan nominal yang valid!');
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Pilih salah satu metode!';
                     }
-                    return rawValue;
-                },
-                didOpen: () => {
-                    const inputElement = document.getElementById('moneyInput');
-                    inputElement.addEventListener('input', () => {
-                        let value = inputElement.value.replace(/[^\d]/g, ''); // Hapus karakter non-angka
-                        if (value) {
-                            value = parseInt(value).toLocaleString('id-ID'); // Format dengan titik
-                            inputElement.value = `Rp. ${value}`;
+                }
+            }).then((result) => {
+                if (result.value === 'kg') {
+                    Swal.fire({
+                        title: `${namaBarang} 
+                Masukkan berat dalam kilogram`,
+                        input: 'number',
+                        inputAttributes: {
+                            step: '0.01',
+                            min: '0'
+                        },
+                        inputPlaceholder: 'Contoh: 0.25 (untuk 250 gram)',
+                        showCancelButton: true
+                    }).then((weightResult) => {
+                        if (weightResult.value && parseFloat(weightResult.value) > 0) {
+                            const berat = parseFloat(weightResult.value);
+                            const totalHarga = berat * hargaPerKg;
+                            const item = {
+                                namaBarang,
+                                hargaSatuan: hargaPerKg,
+                                quantity: `${berat.toFixed(3)} kg`,
+                                totalHarga
+                            };
+                            cart.push(item);
+                            displayCart();
                         } else {
-                            inputElement.value = ''; // Kosongkan jika tidak ada angka
+                            Swal.fire('Error', 'Masukkan berat yang valid!', 'error');
+                        }
+                    });
+                } else if (result.value === 'rupiah') {
+                    Swal.fire({
+                        title: `${namaBarang} - Masukkan nominal uang (Rp)`,
+                        html: `<input type="text" id="moneyInput" class="swal2-input" 
+                            style="width: 100%; padding: 12px; font-size: 18px; box-sizing: border-box; 
+                            margin: 0; border: 1px solid #ddd;" 
+                            placeholder="Contoh: 25000" inputmode="numeric" />`,
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const inputElement = document.getElementById('moneyInput');
+                            const rawValue = inputElement.value.replace(/[^\d]/g, ''); // Ambil hanya angka
+                            if (!rawValue || parseFloat(rawValue) <= 0) {
+                                Swal.showValidationMessage('Masukkan nominal yang valid!');
+                            }
+                            return rawValue;
+                        },
+                        didOpen: () => {
+                            const inputElement = document.getElementById('moneyInput');
+                            inputElement.addEventListener('input', () => {
+                                let value = inputElement.value.replace(/[^\d]/g, ''); // Hapus karakter non-angka
+                                if (value) {
+                                    value = parseInt(value).toLocaleString('id-ID'); // Format dengan titik
+                                    inputElement.value = `Rp. ${value}`;
+                                } else {
+                                    inputElement.value = ''; // Kosongkan jika tidak ada angka
+                                }
+                            });
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value) {
+                            const uang = parseFloat(result.value.replace(/[^\d]/g, '')); // Ambil angka asli
+                            const berat = uang / hargaPerKg; // Hitung berat
+                            const item = {
+                                namaBarang,
+                                hargaSatuan: hargaPerKg,
+                                quantity: `${berat.toFixed(3)} kg`,
+                                totalHarga: uang
+                            };
+                            cart.push(item); // Tambahkan ke keranjang
+                            displayCart(); // Perbarui tampilan keranjang
                         }
                     });
                 }
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    const uang = parseFloat(result.value.replace(/[^\d]/g, '')); // Ambil angka asli
-                    const berat = uang / hargaPerKg; // Hitung berat
-                    const item = {
-                        namaBarang,
-                        hargaSatuan: hargaPerKg,
-                        quantity: `${berat.toFixed(3)} kg`,
-                        totalHarga: uang
-                    };
-                    cart.push(item); // Tambahkan ke keranjang
-                    displayCart(); // Perbarui tampilan keranjang
-                }
+            }); // Penutup Swal.fire().then untuk input radio
+        } // Penutup function addToCartWithSelection
+        // Replace addToCart with addToCartWithSelection
+        onValue(dbRef, (snapshot) => {
+            tableBody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${data.namaBarang}</td>
+            <td>${formatRupiah(data.harga)}</td>
+            <td><button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button></td>
+        `;
+                const addButton = row.querySelector('.add-to-cart-btn');
+                addButton.addEventListener('click', () => {
+                    addToCartWithSelection(data.namaBarang, data.harga);
+                });
+                tableBody.appendChild(row);
+            });
+        });
+        // Display cart
+        function displayCart() {
+            cartBody.innerHTML = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.totalHarga;
+                cartBody.innerHTML += `
+<tr>
+    <td>${item.namaBarang}</td>
+    <td>${item.quantity}</td>
+    <td>${formatRupiah(item.hargaSatuan)}</td>
+    <td>${formatRupiah(item.totalHarga)}</td>
+    <td><i class="fas fa-trash remove-icon" data-index="${index}"></i></td>
+</tr>`;
+            });
+            totalPrice.textContent = `Total: ${formatRupiah(total)}`;
+            const removeButtons = document.querySelectorAll('.remove-icon');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const index = event.target.getAttribute('data-index');
+                    removeFromCart(index);
+                });
             });
         }
-    }); // Penutup Swal.fire().then untuk input radio
-} // Penutup function addToCartWithSelection
-
-                    // Replace addToCart with addToCartWithSelection
-                    onValue(dbRef, (snapshot) => {
-                        tableBody.innerHTML = '';
-                        snapshot.forEach((childSnapshot) => {
-                            const data = childSnapshot.val();
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            displayCart();
+        }
+        // Read data
+        onValue(dbRef, (snapshot) => {
+            tableBody.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                const row = document.createElement('tr');
+                row.innerHTML = `
             <td>${data.namaBarang}</td>
             <td>${formatRupiah(data.harga)}</td>
             <td><button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button></td>
         `;
-
-                            const addButton = row.querySelector('.add-to-cart-btn');
-                            addButton.addEventListener('click', () => {
-                                addToCartWithSelection(data.namaBarang, data.harga);
-                            });
-
-                            tableBody.appendChild(row);
-                        });
-                    });
-
-                    // Display cart
-                    function displayCart() {
-                        cartBody.innerHTML = '';
-                        let total = 0;
-
-                        cart.forEach((item, index) => {
-                            total += item.totalHarga;
-                            cartBody.innerHTML += `
-            <tr>
-                <td>${item.namaBarang}</td>
-                <td>${item.quantity}</td>
-                <td>${formatRupiah(item.hargaSatuan)}</td>
-                <td>${formatRupiah(item.totalHarga)}</td>
-                <td><button class="remove-btn" data-index="${index}">Hapus</button></td>
-            </tr>`;
-                        });
-
-                        totalPrice.textContent = `Total: ${formatRupiah(total)}`;
-
-                        const removeButtons = document.querySelectorAll('.remove-btn');
-                        removeButtons.forEach(button => {
-                            button.addEventListener('click', (event) => {
-                                const index = event.target.getAttribute('data-index');
-                                removeFromCart(index);
-                            });
-                        });
-                    }
-
-                    // Remove from cart
-                    function removeFromCart(index) {
-                        cart.splice(index, 1);
-                        displayCart();
-                    }
-
-                    // Read data
-                    onValue(dbRef, (snapshot) => {
-                        tableBody.innerHTML = '';
-                        snapshot.forEach((childSnapshot) => {
-                            const data = childSnapshot.val();
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-            <td>${data.namaBarang}</td>
-            <td>${formatRupiah(data.harga)}</td>
-            <td><button class="add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button></td>
+                const addButton = row.querySelector('.add-to-cart-btn');
+                addButton.addEventListener('click', () => {
+                    addToCartWithSelection(data.namaBarang, data.harga);
+                });
+                tableBody.appendChild(row);
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const paidAmountInput = document.getElementById('paidAmount');
+            const calculateChangeButton = document.getElementById('calculateChange');
+            const changeAmountDisplay = document.getElementById('changeAmount');
+            // Reset input saat halaman di-refresh
+            paidAmountInput.value = '';
+            // Format angka dengan titik setiap 3 digit
+            function formatWithDots(value) {
+                return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+            // Event listener untuk input formatting
+            paidAmountInput.addEventListener('input', () => {
+                // Hapus semua karakter non-digit
+                let rawValue = paidAmountInput.value.replace(/[^\d]/g, '');
+                // Format dengan titik
+                if (rawValue) {
+                    paidAmountInput.value = formatWithDots(rawValue);
+                } else {
+                    paidAmountInput.value = ''; // Kosongkan jika tidak ada angka
+                }
+            });
+            // Fungsi untuk menghitung kembalian tetap berjalan dengan angka murni
+            calculateChangeButton.addEventListener('click', () => {
+                const paidAmount = parseFloat(paidAmountInput.value.replace(/\./g, '')); // Hapus titik untuk parsing angka
+                const total = cart.reduce((sum, item) => sum + item.totalHarga, 0); // Misalkan 'cart' sudah terdefinisi sebelumnya
+                if (isNaN(paidAmount) || paidAmount <= 0) {
+                    Swal.fire('Error', 'Masukkan jumlah uang yang valid!', 'error');
+                    return;
+                }
+                if (paidAmount < total) {
+                    Swal.fire('Error', 'Uang yang dibayarkan kurang!', 'error');
+                    return;
+                }
+                const change = paidAmount - total;
+                changeAmountDisplay.textContent = `
+            Kembalian: ${formatRupiah(paidAmount)} - ${formatRupiah(total)} = ${formatRupiah(change)}
         `;
-
-                            const addButton = row.querySelector('.add-to-cart-btn');
-                            addButton.addEventListener('click', () => {
-                                addToCartWithSelection(data.namaBarang, data.harga);
-                            });
-
-                            tableBody.appendChild(row);
-                        });
-                    });
-// Ambil elemen input dan elemen untuk menampilkan kembalian
-const paidAmountInput = document.getElementById('paidAmount');
-const calculateChangeButton = document.getElementById('calculateChange');
-const changeAmountDisplay = document.getElementById('changeAmount');
-
-// Fungsi untuk menghitung kembalian
-calculateChangeButton.addEventListener('click', () => {
-    const paidAmount = parseFloat(paidAmountInput.value); // Ambil jumlah yang dibayarkan
-    const total = cart.reduce((sum, item) => sum + item.totalHarga, 0); // Hitung total belanja
-
-    if (isNaN(paidAmount) || paidAmount <= 0) {
-        Swal.fire('Error', 'Masukkan jumlah uang yang valid!', 'error');
-        return;
-    }
-
-    if (paidAmount < total) {
-        Swal.fire('Error', 'Uang yang dibayarkan kurang!', 'error');
-        return;
-    }
-
-    const change = paidAmount - total; // Hitung kembalian
-    changeAmountDisplay.textContent = `Kembalian: ${formatRupiah(change)}`; // Tampilkan kembalian
-});
-
+            });
+            // Format ke Rupiah
+            function formatRupiah(angka) {
+                return 'Rp. ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+        });
     </script>
 </body>
-
 </html>
