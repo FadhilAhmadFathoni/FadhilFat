@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Fixed Size (500x500)</title>
+  <!-- Link ke Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Link ke SweetAlert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.15/dist/sweetalert2.min.css">
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      color: #333;
+      font-size: 2rem;
+    }
+    .canvas-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .canvas-container div {
+      border: 2px solid #eee;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: white;
+      width: 100%;
+      max-width: 600px;
+      box-sizing: border-box;
+      max-height: 600px; /* Membatasi tinggi card */
+      overflow: hidden; /* Memastikan gambar atau canvas tidak keluar dari card */
+    }
+    canvas {
+      display: block; /* Menghapus jarak bawah canvas */
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .upload-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-right: 10px;
+}
+
+.upload-label i {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.upload-label:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.upload-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* Menyembunyikan input asli */
+  cursor: pointer;
+}
+
+.upload-wrapper:hover .upload-input {
+  cursor: pointer;
+}
+
+.file-name {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #666;
+  word-wrap: break-word;  /* Membuat nama file bisa dipindah ke baris berikutnya */
+  white-space: normal;    /* Mengizinkan teks untuk membungkus secara otomatis */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Untuk nama file yang terlalu panjang, akan memotong dengan '...' */
+}
+
+    .download-wrapper {
+      margin-top: 20px;
+    }
+    .image-dimensions {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Responsif: Tampilan pada perangkat lebih kecil */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .canvas-container {
+        flex-direction: column; /* Tampilan vertikal pada layar kecil */
+        gap: 20px;
+      }
+      .btn {
+        width: 100%; /* Tombol download memenuhi lebar layar */
+        font-size: 1.2rem;
+      }
+      .upload-wrapper {
+    width: 100%;
+  }
+
+  .upload-label {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+    }
+
+    /* Responsif: Tampilan pada perangkat sangat kecil (mobile) */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+      .upload-wrapper i {
+        font-size: 20px;
+      }
+      .btn {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Canvas Fixed Size (500x500)</h1>
+  
+  <!-- Input upload gambar dengan ikon -->
+<div class="upload-wrapper">
+    <label for="upload" class="upload-label">
+      <i class="fas fa-upload"></i> Pilih Gambar
+    </label>
+    <input type="file" id="upload" accept="image/*" class="upload-input">
+    <div id="file-name" class="file-name"></div> <!-- Menampilkan nama file -->
+  </div>
+  
+  
+  <div class="canvas-container">
+    <div>
+      <h3>Sebelum</h3>
+      <canvas id="originalCanvas"></canvas>
+      <div id="originalSize" class="image-dimensions"></div>
+    </div>
+    <div>
+      <h3>Sesudah</h3>
+      <canvas id="transformedCanvas" width="500" height="500"></canvas>
+      <div id="transformedSize" class="image-dimensions"></div>
+    </div>
+  </div>
+  
+  <!-- Tombol unduh dengan ikon -->
+  <div class="download-wrapper">
+    <a id="download" download="fixed-canvas-image.png">
+      <button class="btn"><i class="fas fa-download"></i> Download</button>
+    </a>
+  </div>
+
+  <!-- SweetAlert dan script lainnya -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.15/dist/sweetalert2.all.min.js"></script>
+  <script>
+    const upload = document.getElementById('upload');
+    const originalCanvas = document.getElementById('originalCanvas');
+    const transformedCanvas = document.getElementById('transformedCanvas');
+    const originalCtx = originalCanvas.getContext('2d');
+    const transformedCtx = transformedCanvas.getContext('2d');
+    const download = document.getElementById('download');
+    const originalSize = document.getElementById('originalSize');
+    const transformedSize = document.getElementById('transformedSize');
+
+    let img = null;
+
+    // Reset semua elemen saat refresh
+    function resetCanvas() {
+      originalCanvas.width = 0;
+      originalCanvas.height = 0;
+      transformedCanvas.width = 500;
+      transformedCanvas.height = 500;
+      transformedCtx.clearRect(0, 0, transformedCanvas.width, transformedCanvas.height);
+      upload.value = ''; // Clear file input
+    }
+
+    // Fungsi untuk menggambar gambar asli
+    function drawOriginalImage() {
+      originalCanvas.width = img.width;
+      originalCanvas.height = img.height;
+      originalCtx.drawImage(img, 0, 0);
+      originalSize.textContent = `${img.width} x ${img.height} px`;
+    }
+
+    // Fungsi untuk menggambar gambar transformasi (output wajib 500x500)
+    function drawTransformedImage() {
+      const squareSize = 500;
+
+      const canvasAspectRatio = squareSize / squareSize;
+      const imgAspectRatio = img.width / img.height;
+
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (imgAspectRatio > canvasAspectRatio) {
+        drawHeight = squareSize;
+        drawWidth = img.width * (squareSize / img.height);
+        offsetX = (squareSize - drawWidth) / 2;
+        offsetY = 0;
+      } else {
+        drawWidth = squareSize;
+        drawHeight = img.height * (squareSize / img.width);
+        offsetX = 0;
+        offsetY = (squareSize - drawHeight) / 2;
+      }
+
+      transformedCtx.clearRect(0, 0, squareSize, squareSize);
+      transformedCtx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+
+      transformedSize.textContent = `${squareSize} x ${squareSize} px`; // Ukuran tetap 500x500
+
+      // Perbarui tautan unduhan
+      download.href = transformedCanvas.toDataURL();
+    }
+
+    // Event listener untuk upload gambar
+    upload.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        img = new Image();
+
+        reader.onload = function (e) {
+          img.src = e.target.result;
+        };
+
+        img.onload = function () {
+          drawOriginalImage();
+          drawTransformedImage();
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        // Menggunakan SweetAlert untuk notifikasi jika file tidak dipilih
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Silakan pilih gambar untuk diunggah!',
+        });
+      }
+    });
+
+    // Reset canvas saat halaman di-refresh
+    window.addEventListener('load', resetCanvas);
+  </script>
+</body>
+</html>
