@@ -86,13 +86,55 @@
             text-align: center;
             padding: 10px 0;
         }
+        .social-icons {
+        margin-top: 10px;
+    }
+
+    .social-icons a {
+        color: #fff;
+        margin: 0 10px;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-icons a:hover {
+        color: #4caf50;
+    }
+    .countdown-container {
+        text-align: center;
+        margin-top: 20px;
+        padding: 15px;
+        background: #4caf50;
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .countdown-container h2 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    #timer {
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    #time-details {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
     </style>
 </head>
 <body>
     <header>
         <div class="logo"><i class="fas fa-home"></i> FadhilFat</div>
     </header>
-
+    <div id="countdown" class="countdown-container">
+        <h2>Puasa Ramadhan: <span id="timer"></span> Hari Lagi</h2>
+        <p>Sisa Waktu: <span id="time-details"></span></p>
+    </div>       
     <main>
         <section id="home" class="hero">
             <a href="Login/password.html" class="box">
@@ -124,6 +166,41 @@
 
     <footer>
         <p>&copy; 2024 FadhilFat. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="https://wa.me/6282127446402" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://github.com/FadhilAhmadFathoni" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://id.linkedin.com/in/fadhil-ahmad-fathoni-532a6627a" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/@fadhilfathoni" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
     </footer>
+    <script>
+         const targetDate = new Date('2025-03-01T00:00:00').getTime(); // 1 Maret 2025
+    const timerElement = document.getElementById('timer');
+    const timeDetailsElement = document.getElementById('time-details');
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const timeRemaining = targetDate - now;
+
+        if (timeRemaining > 0) {
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            timerElement.textContent = `${days}`;
+            timeDetailsElement.textContent = `${hours} Jam ${minutes} Menit ${seconds} Detik`;
+        } else {
+            timerElement.textContent = 'Hari Ini!';
+            timeDetailsElement.textContent = 'Puasa Ramadhan telah dimulai!';
+        }
+    }
+
+    // Update setiap detik
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    </script>
+    
 </body>
 </html>
