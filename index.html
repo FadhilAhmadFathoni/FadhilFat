@@ -29,6 +29,56 @@
 
         .logo {
             font-size: 24px;
+            display: inline-block;
+        }
+
+        .search-bar {
+            margin-top: 10px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 5px 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-bar button {
+            padding: 5px 10px;
+            font-size: 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #45a049;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 35px;
+            left: 0;
+            background: rgb(202, 57, 57);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+            width: calc(100% - 20px);
+            z-index: 1000;
+        }
+
+        .autocomplete-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestions div:hover {
+            background-color: #ff0000;
         }
 
         /* Hero Section with Boxes */
@@ -86,78 +136,102 @@
             text-align: center;
             padding: 10px 0;
         }
+
         .social-icons {
-        margin-top: 10px;
-    }
+            margin-top: 10px;
+        }
 
-    .social-icons a {
-        color: #fff;
-        margin: 0 10px;
-        font-size: 1.5rem;
-        transition: color 0.3s ease;
-        text-decoration: none;
-    }
+        .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
 
-    .social-icons a:hover {
-        color: #4caf50;
-    }
-    .countdown-container {
-        text-align: center;
-        margin-top: 20px;
-        padding: 15px;
-        background: #4caf50;
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+        .social-icons a:hover {
+            color: #4caf50;
+        }
 
-    .countdown-container h2 {
-        font-size: 1.8rem;
-        margin-bottom: 10px;
-    }
+        .countdown-container {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #4caf50;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    #timer {
-        font-weight: bold;
-        font-size: 2rem;
-    }
+        .countdown-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
 
-    #time-details {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
+        #timer {
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        #time-details {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .progress-bar .progress {
+            height: 20px;
+            background: rgb(76, 62, 139);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="logo"><i class="fas fa-home"></i> FadhilFat</div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Cari..." oninput="showSuggestions()">
+            <div class="autocomplete-suggestions" id="suggestions"></div>
+        </div>
     </header>
     <div id="countdown" class="countdown-container">
         <h2>Puasa Ramadhan: <span id="timer"></span> Hari Lagi</h2>
         <p>Sisa Waktu: <span id="time-details"></span></p>
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
     </div>       
     <main>
         <section id="home" class="hero">
-            <a href="Login/password.html" class="box">
+            <a href="Login/password.html" class="box" data-title="Log In">
                 <img src="https://i.pinimg.com/736x/e5/6b/84/e56b841924ac729935e858cb59535fb7.jpg" alt="Image 1">
                 <h3>Log In</h3>
             </a>
-            <a href="Catatan/catatan.html" class="box">
+            <a href="Catatan/catatan.html" class="box" data-title="Catatan">
                 <img src="https://i.pinimg.com/236x/c9/bb/07/c9bb0785dc38e9b41322e547a1524522.jpg" alt="Image 2">
                 <h3>Catatan</h3>
             </a>
-            <a href="Aritmatika/aritmatika.html" class="box">
+            <a href="Aritmatika/aritmatika.html" class="box" data-title="Aritmatika">
                 <img src="https://i.pinimg.com/236x/e3/0a/2d/e30a2d409d8ecbb6b890470a90988d45.jpg" alt="Image 3">
                 <h3>Aritmatika</h3>
             </a>
-            <a href="Cocok/cocok.html" class="box">
+            <a href="Cocok/cocok.html" class="box" data-title="Cocok Kata">
                 <img src="https://i.pinimg.com/236x/f3/32/07/f33207bd2d97254d9ac20118c4a3bb77.jpg" alt="Image 4">
                 <h3>Cocok Kata</h3>
             </a>
-            <a href="Todolist/todolist.html" class="box">
+            <a href="Todolist/todolist.html" class="box" data-title="To Do List">
                 <img src="https://i.pinimg.com/236x/b5/10/42/b51042b6d3c380df9295852d3dbdc09f.jpg" alt="Image 4">
                 <h3>To Do List</h3>
             </a>
-            <a href="Statistika/statistika.html" class="box">
+            <a href="Statistika/statistika.html" class="box" data-title="Statistika">
                 <img src="https://i.pinimg.com/236x/6d/9d/51/6d9d511eb5782f6c428980d7e39c9433.jpg" alt="Image 6">
                 <h3>Statistika</h3>
             </a>
@@ -175,32 +249,75 @@
         </div>
     </footer>
     <script>
-         const targetDate = new Date('2025-03-01T00:00:00').getTime(); // 1 Maret 2025
-    const timerElement = document.getElementById('timer');
-    const timeDetailsElement = document.getElementById('time-details');
+        const targetDate = new Date('2025-03-01T00:00:00').getTime(); // 1 Maret 2025
+        const startDate = new Date('2025-01-01T00:00:00').getTime(); // 1 Januari 2025
+        const totalDuration = targetDate - startDate;
+        const timerElement = document.getElementById('timer');
+        const timeDetailsElement = document.getElementById('time-details');
+        const progressElement = document.getElementById('progress');
 
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const timeRemaining = targetDate - now;
+        const dataTitles = ["Log In", "Catatan", "Aritmatika", "Cocok Kata", "To Do List", "Statistika"];
+        const suggestionsBox = document.getElementById('suggestions');
 
-        if (timeRemaining > 0) {
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeRemaining = targetDate - now;
 
-            timerElement.textContent = `${days}`;
-            timeDetailsElement.textContent = `${hours} Jam ${minutes} Menit ${seconds} Detik`;
-        } else {
-            timerElement.textContent = 'Hari Ini!';
-            timeDetailsElement.textContent = 'Puasa Ramadhan telah dimulai!';
+            if (timeRemaining > 0) {
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                timerElement.textContent = `${days}`;
+                timeDetailsElement.textContent = `${hours} Jam ${minutes} Menit ${seconds} Detik`;
+
+                const elapsed = totalDuration - timeRemaining;
+                const progressPercentage = (elapsed / totalDuration) * 100;
+                progressElement.style.width = `${progressPercentage}%`;
+            } else {
+                timerElement.textContent = 'Hari Ini!';
+                timeDetailsElement.textContent = 'Puasa Ramadhan telah dimulai!';
+                progressElement.style.width = '100%';
+            }
         }
-    }
 
-    // Update setiap detik
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+        function showSuggestions() {
+            const input = document.getElementById('search-input').value.toLowerCase();
+            suggestionsBox.innerHTML = '';
+
+            if (input) {
+                const filtered = dataTitles.filter(title => title.toLowerCase().includes(input));
+
+                filtered.forEach(item => {
+                    const div = document.createElement('div');
+                    div.textContent = item;
+                    div.onclick = () => {
+                        document.getElementById('search-input').value = item;
+                        suggestionsBox.innerHTML = '';
+                        searchContent(item);
+                    };
+                    suggestionsBox.appendChild(div);
+                });
+            }
+        }
+
+        function searchContent(input) {
+            const boxes = document.querySelectorAll('.hero .box');
+
+            boxes.forEach(box => {
+                const title = box.getAttribute('data-title').toLowerCase();
+                if (title.includes(input.toLowerCase())) {
+                    box.style.display = 'block';
+                } else {
+                    box.style.display = 'none';
+                }
+            });
+        }
+
+        // Update setiap detik
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
-    
 </body>
 </html>
