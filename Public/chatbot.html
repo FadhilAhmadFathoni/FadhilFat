@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        /* CSS untuk tampilan chatbot */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Lebar 90% dari layar */
+            max-width: 500px; /* Maksimal lebar 500px */
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-box {
+            padding: 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .input-container {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+        .input-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 0;
+            outline: none;
+        }
+        .input-container button {
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 0;
+        }
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message p {
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+        }
+        .message.user p {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Media query untuk layar lebih kecil */
+        @media (max-width: 600px) {
+            .chat-container {
+                width: 100%; /* Lebar 100% pada perangkat kecil */
+                max-width: none; /* Hapus batas maksimal lebar */
+                margin: 10px; /* Margin 10px agar tidak terlalu mepet dengan tepi layar */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+            <!-- Pesan akan muncul di sini -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ketik pesan..." />
+            <button onclick="sendMessage()">Kirim</button>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan pesan
+        function displayMessage(message, sender) {
+            const chatBox = document.getElementById("chatBox");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+            const messageParagraph = document.createElement("p");
+            messageParagraph.textContent = message;
+            messageDiv.appendChild(messageParagraph);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll otomatis ke bawah
+        }
+
+        // Fungsi untuk mengirim pesan dan memproses input
+        function sendMessage() {
+            const userInput = document.getElementById("userInput");
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                displayMessage(userMessage, "user");
+                userInput.value = "";
+
+                // Bot response
+                setTimeout(() => {
+                    const botMessage = generateBotResponse(userMessage);
+                    displayMessage(botMessage, "bot");
+                }, 1000);
+            }
+        }
+
+        // Fungsi untuk menghasilkan respons bot yang lebih bervariasi
+        function generateBotResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            if (lowerMessage.includes("halo")) {
+                return "Halo! Apa kabar?";
+            } else if (lowerMessage.includes("apa yang bisa kamu lakukan")) {
+                return "Saya bisa membantu kamu menjawab pertanyaan atau memberi saran!";
+            } else if (lowerMessage.includes("kamu sedang") && (lowerMessage.includes("apa") || lowerMessage.includes("apa?"))) {
+                return "Saya sedang menunggu pertanyaan dari kamu!";
+            } else if (lowerMessage.includes("jelek")) {
+                return "Jangan khawatir, saya di sini untuk membantu!";
+            } else {
+                return "Maaf, saya tidak mengerti. Coba tanya yang lain!";
+            }
+        }
+
+        // Membuat bot menyapa saat halaman dimuat
+        window.onload = () => {
+            displayMessage("Halo! Saya chatbot. Apa yang bisa saya bantu?", "bot");
+        };
+    </script>
+</body>
+</html>
