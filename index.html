@@ -282,38 +282,47 @@
             }
         }
 
-        function showSuggestions() {
-            const input = document.getElementById('search-input').value.toLowerCase();
-            suggestionsBox.innerHTML = '';
+        document.getElementById('search-input').addEventListener('input', function () {
+    const input = this.value;
+    showSuggestions(input);
+    searchContent(input);
+});
 
-            if (input) {
-                const filtered = dataTitles.filter(title => title.toLowerCase().includes(input));
+function showSuggestions(input) {
+    const suggestionsBox = document.getElementById('suggestions');
+    suggestionsBox.innerHTML = ''; // Bersihkan saran sebelumnya
 
-                filtered.forEach(item => {
-                    const div = document.createElement('div');
-                    div.textContent = item;
-                    div.onclick = () => {
-                        document.getElementById('search-input').value = item;
-                        suggestionsBox.innerHTML = '';
-                        searchContent(item);
-                    };
-                    suggestionsBox.appendChild(div);
-                });
-            }
-        }
+    if (input.trim() === '') return; // Jangan tampilkan saran jika input kosong
 
-        function searchContent(input) {
-            const boxes = document.querySelectorAll('.hero .box');
+    const filtered = dataTitles.filter(title => title.toLowerCase().includes(input.toLowerCase()));
 
-            boxes.forEach(box => {
-                const title = box.getAttribute('data-title').toLowerCase();
-                if (title.includes(input.toLowerCase())) {
-                    box.style.display = 'block';
-                } else {
-                    box.style.display = 'none';
-                }
-            });
-        }
+    filtered.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = item;
+        div.classList.add('suggestion-item'); // Tambahkan kelas untuk styling jika diperlukan
+        div.onclick = () => {
+            document.getElementById('search-input').value = item;
+            suggestionsBox.innerHTML = ''; // Hapus saran setelah dipilih
+            searchContent(item);
+        };
+        suggestionsBox.appendChild(div);
+    });
+}
+
+function searchContent(input) {
+    const boxes = document.querySelectorAll('.hero .box');
+
+    if (input.trim() === '') {
+        boxes.forEach(box => box.style.display = 'block');
+        return;
+    }
+
+    boxes.forEach(box => {
+        const title = box.getAttribute('data-title').toLowerCase();
+        box.style.display = title.includes(input.toLowerCase()) ? 'block' : 'none';
+    });
+}
+
 
         // Update setiap detik
         setInterval(updateCountdown, 1000);
