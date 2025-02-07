@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Replacer</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,9 +21,34 @@
             max-width: 600px;
             margin: auto;
         }
+        .card {
+            background: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            position: relative;
+        }
+        .copy-btn {
+            display: block;
+            margin: 10px auto 0;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
         p {
             font-size: 16px;
             line-height: 1.6;
+            margin: 0;
         }
         input {
             padding: 10px;
@@ -49,32 +75,59 @@
 </head>
 <body>
     <div class="container">
-        <p id="originalText">A tiny cat, about the size of a human finger, is shown in extreme close-up while standing on a human finger. The animal's body and the entire finger supporting it are in sharp focus, textured detail. Capturing every fine detail of the animal and the texture of the hand. The hand is only partially visible, but the animal's body and fingers are very clear. Soft natural lighting illuminates the scene, enhancing detail without losing sharpness. Maintaining full focus on the animal and finger.</p>
+        <div class="card">
+            <p id="originalText">A tiny cat, about the size of a human finger, is shown in extreme close-up while standing on a human finger. The animal's body and the entire finger supporting it are in sharp focus, textured detail. Capturing every fine detail of the animal and the texture of the hand. The hand is only partially visible, but the animal's body and fingers are very clear. Soft natural lighting illuminates the scene, enhancing detail without losing sharpness. Maintaining full focus on the animal and finger.</p>
+            <button class="copy-btn" onclick="copyText('originalText')">Copy</button>
+        </div>
         
-        <label for="newWord">Enter a word to replace "cat": </label>
-        <input type="text" id="newWord" placeholder="Enter new word">
-        <button onclick="replaceWord()">Replace</button>
-        <button onclick="copyText()">Copy</button>
+        <label for="newWords">Enter words to replace "cat" (separated by commas): </label>
+        <input type="text" id="newWords" placeholder="Enter new words">
+        <button onclick="replaceWords()">Replace</button>
         
-        <p id="modifiedText">A tiny cat, about the size of a human finger, is shown in extreme close-up while standing on a human finger. The animal's body and the entire finger supporting it are in sharp focus, textured detail. Capturing every fine detail of the animal and the texture of the hand. The hand is only partially visible, but the animal's body and fingers are very clear. Soft natural lighting illuminates the scene, enhancing detail without losing sharpness. Maintaining full focus on the animal and finger.</p>
+        <div id="modifiedTextContainer"></div>
     </div>
     
     <script>
-        function replaceWord() {
-            let newWord = document.getElementById("newWord").value;
-            let textElement = document.getElementById("modifiedText");
+        function replaceWords() {
+            let newWords = document.getElementById("newWords").value.split(",").map(word => word.trim());
             let originalText = document.getElementById("originalText").innerText;
+            let modifiedTextContainer = document.getElementById("modifiedTextContainer");
             
-            let newText = originalText.replace(/\bcat\b/g, newWord);
-            textElement.innerText = newText;
+            modifiedTextContainer.innerHTML = "";
+            
+            newWords.forEach((word, index) => {
+                let newText = originalText.replace(/\bcat\b/g, word);
+                let card = document.createElement("div");
+                card.classList.add("card");
+                
+                let paragraph = document.createElement("p");
+                let paragraphId = `modifiedText${index}`;
+                paragraph.id = paragraphId;
+                paragraph.innerText = newText;
+                
+                let copyButton = document.createElement("button");
+                copyButton.innerText = "Copy";
+                copyButton.classList.add("copy-btn");
+                copyButton.onclick = function() {
+                    copyText(paragraphId);
+                };
+                
+                card.appendChild(paragraph);
+                card.appendChild(copyButton);
+                modifiedTextContainer.appendChild(card);
+            });
         }
 
-        function copyText() {
-            let textElement = document.getElementById("modifiedText");
-            let text = textElement.innerText;
-            
+        function copyText(elementId) {
+            let text = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert("Copied to clipboard!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copied!',
+                    text: 'Text has been copied to clipboard.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
             }).catch(err => {
                 console.error("Error copying text: ", err);
             });
