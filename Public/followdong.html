@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalimat & Emoji Random</title>
+  <!-- Sertakan SweetAlert2 dari CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #randomText {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      word-wrap: break-word;
+    }
+    button {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px auto;
+      display: block;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    @media (max-width: 480px) {
+      #randomText {
+        font-size: 18px;
+      }
+      button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="generateRandomText()">🎲 Tampilkan Kalimat Baru</button>
+    <div id="randomText"></div>
+    <button onclick="copyToClipboard()">📋 Salin Teks</button>
+  </div>
+
+  <script>
+    // 100 varian kalimat untuk bagian pertama (meminta follow)
+    const firstPhrases = [
+      "Tolong follow aku",
+      "Follow aku dulu, ya",
+      "Ayo follow aku",
+      "Jangan lupa follow aku",
+      "Yuk follow aku",
+      "Silakan follow aku",
+      "Follow aku, please",
+      "Ayo, follow aku",
+      "Mau follow? Follow aku",
+      "Jangan lupa untuk follow aku",
+      "Follow aku, dong!",
+      "Bantu follow aku, ya",
+      "Ikuti aku, yuk",
+      "Ayo, ikuti aku",
+      "Follow aku sekarang",
+      "Follow aku sejenak, ya",
+      "Aku tunggu follow-mu",
+      "Follow aku, please!",
+      "Yuk, ikuti aku",
+      "Follow aku, biar deket",
+      "Jangan lupa, follow aku",
+      "Ayo, follow aku sekarang",
+      "Follow aku untuk update",
+      "Jangan sampai ketinggalan, follow aku",
+      "Ikuti aku dan dapat info terbaru",
+      "Follow aku dan temui kejutan",
+      "Follow aku, yuk coba",
+      "Ayo, follow aku di sini",
+      "Tinggalkan follow untuk aku",
+      "Follow aku, teman",
+      "Jangan ragu, follow aku",
+      "Mari follow aku",
+      "Follow aku, yuk!",
+      "Coba follow aku",
+      "Follow aku, please, ya",
+      "Follow aku untuk lebih banyak konten",
+      "Sudi follow aku",
+      "Follow aku, kita saling support",
+      "Beri aku follow, ya",
+      "Follow aku, ayo!",
+      "Follow aku, temani aku",
+      "Jangan lupa follow, ya",
+      "Follow aku, kawan",
+      "Ikuti aku, bro!",
+      "Ikuti aku, sis!",
+      "Follow aku, guys",
+      "Follow aku untuk update seru",
+      "Follow aku, jangan ragu",
+      "Ayo, langsung follow aku",
+      "Follow aku, ayo dong",
+      "Follow aku kalau kamu bisa",
+      "Jangan lupa untuk ikuti aku",
+      "Follow aku, please, please",
+      "Ikuti aku, please",
+      "Follow aku, jangan lupa",
+      "Follow aku, yuk langsung",
+      "Cukup follow aku",
+      "Follow aku untuk lebih dekat",
+      "Follow aku untuk temani hari",
+      "Follow aku, enggak akan rugi",
+      "Follow aku, banyak kejutan",
+      "Follow aku, segera",
+      "Ikuti aku dan rasakan serunya",
+      "Follow aku, jadi bagian",
+      "Ayo, follow aku dan gabung",
+      "Follow aku untuk update menarik",
+      "Ikuti aku untuk kabar terbaru",
+      "Yuk, langsung follow aku",
+      "Follow aku, jangan sampai terlewat",
+      "Follow aku, dan lihat kisahnya",
+      "Follow aku, selalu ada cerita",
+      "Follow aku, dan kita berbagi",
+      "Ikuti aku untuk inspirasi",
+      "Ayo, follow aku biar ga ketinggalan",
+      "Follow aku, untuk kamu",
+      "Follow aku, ayo temui",
+      "Follow aku, supaya ga nyesel",
+      "Follow aku, dan saksikan",
+      "Ikuti aku, mari bersama",
+      "Follow aku, jangan lewatkan",
+      "Ayo, ikuti aku sekarang juga",
+      "Follow aku untuk berbagi cerita",
+      "Follow aku, karena aku butuh kamu",
+      "Ikuti aku, jadi bagian dari kami",
+      "Follow aku, ayo sama-sama",
+      "Follow aku, yuk ikuti",
+      "Ikuti aku untuk petualangan baru",
+      "Follow aku, dan rasakan bedanya",
+      "Follow aku, pasti seru",
+      "Ayo, follow aku tanpa ragu",
+      "Follow aku, dan jadikan hari lebih baik",
+      "Ikuti aku, untuk kabar hangat",
+      "Follow aku, selalu ada hal baru",
+      "Follow aku, yuk bergabung",
+      "Ikuti aku, untuk keseruan",
+      "Follow aku, untuk temani langkahmu",
+      "Follow aku, mari kita sukses bersama",
+      "Follow aku, jadi partnerku",
+      "Ikuti aku, jangan sampai ketinggalan info",
+      "Follow aku, ya teman"
+    ];
+
+    // 100 varian kalimat untuk bagian kedua (janji follow balik)
+    const secondPhrases = [
+      "nanti aku follow balik",
+      "bakal aku follow balik",
+      "pasti aku follow balik",
+      "aku akan follow balik",
+      "follow kamu juga",
+      "follow balik, ya",
+      "aku follow balik secepatnya",
+      "follow balik nanti",
+      "saya akan follow balik",
+      "follow-mu akan saya balas",
+      "tak lama aku follow balik",
+      "aku follow kamu balik",
+      "balasan follow dari aku",
+      "follow balik pasti",
+      "follow kamu, aku follow balik",
+      "akan follow balik, kok",
+      "follow kamu akan aku follow balik",
+      "follow-mu pasti aku balas",
+      "balas follow segera",
+      "follow-mu akan segera dibalas",
+      "aku akan segera follow balik",
+      "follow balik pastinya",
+      "follow balik, tenang saja",
+      "aku selalu follow balik",
+      "follow-mu aku hargai, aku follow balik",
+      "follow balik, nanti",
+      "balasan follow dari aku akan segera",
+      "aku akan pastikan follow balik",
+      "follow kamu balik ya",
+      "follow-mu takkan terlupakan, aku follow balik",
+      "balas follow, jangan khawatir",
+      "aku akan follow balik secepatnya",
+      "follow balik? Tentu saja",
+      "follow kamu akan segera aku follow balik",
+      "aku tidak lupa follow balik",
+      "follow balik dengan sepenuh hati",
+      "follow kamu langsung aku follow balik",
+      "aku akan follow balik dengan cepat",
+      "follow-mu langsung aku balas",
+      "aku akan follow balik dalam sekejap",
+      "follow balik? Sudah pasti",
+      "follow-mu aku balas dengan follow balik",
+      "balasan follow segera",
+      "follow balik, janji",
+      "follow kamu, aku follow balik",
+      "tak lama lagi, aku follow balik",
+      "balasan follow dalam hitungan detik",
+      "follow-mu, follow balik dariku",
+      "follow baliknya aku segera lakukan",
+      "follow kamu, dan aku follow balik",
+      "follow balik dijamin",
+      "follow kamu akan selalu aku follow balik",
+      "balasan follow pasti datang",
+      "aku follow balik setiap follow",
+      "follow balik? Yes!",
+      "follow kamu, balik follow dari aku",
+      "follow-mu akan selalu aku balas",
+      "aku akan memberikan follow balik",
+      "follow balik, tidak akan terlambat",
+      "follow kamu, aku akan follow balik",
+      "balasan follow, pasti",
+      "follow balik itu janji",
+      "aku follow balik, tentu saja",
+      "follow-mu, follow balik aku",
+      "follow balik akan segera terjadi",
+      "follow kamu dan aku follow balik",
+      "aku follow balik setulus hati",
+      "follow balik, itu janjiku",
+      "tak lupa follow balik untuk kamu",
+      "follow balik, nggak akan kelupaan",
+      "follow kamu, follow balik dariku",
+      "balasan follow sudah diatur",
+      "follow balik, santai saja",
+      "follow-mu, segera aku follow balik",
+      "aku selalu berusaha follow balik",
+      "follow balik, pastinya!",
+      "follow kamu, dan follow balik akan datang",
+      "balasan follow aku jamin",
+      "follow balik, tanpa ragu",
+      "aku akan follow balik secepatnya, janji",
+      "follow kamu, aku tak lupa follow balik",
+      "follow balik segera, percayalah",
+      "follow-mu, follow balik, itu pasti",
+      "tak ada yang terlupakan, follow balik",
+      "follow kamu, balasan follow tak akan lama",
+      "follow balik secepat kilat",
+      "follow balik, aku pastikan",
+      "balasan follow sudah menanti",
+      "follow-mu akan aku follow balik dengan setia",
+      "aku selalu follow balik setiap follow",
+      "follow kamu, aku follow balik dengan cinta",
+      "follow balik, percayalah",
+      "follow-mu akan selalu dibalas",
+      "follow balik adalah janjiku",
+      "aku akan pastikan untuk follow balik",
+      "follow kamu dan balasan follow selalu ada",
+      "follow balik, itu komitmen",
+      "tak akan lupa follow balik",
+      "follow-mu, follow balik, selalu",
+      "aku follow balik, janji setia"
+    ];
+
+    // Array emoji untuk ekspresi wajah (positif)
+    const firstEmojis = [
+      "😀", "😃", "😄", "😁", "😆", "😊", "😋", "😎", "😍", "😘",
+      "😜", "🤪", "😇", "🥰", "🤩", "🙂", "🙃", "🤗", "😺", "😸"
+    ];
+
+    // Array emoji untuk ekspresi tangan (ditambah roket, nilai 100, api, tangan membentuk hati, love)
+    const secondEmojis = [
+      "👋", "✋", "👌", "🤞", "🤟", "🤘", "🤙", "👊", "✊", "👏",
+      "🙌", "👐", "🙏", "🤲", "🤚", "🖐", "🤏", "👉", "👈", "👆",
+      "👇", "☝️", "🚀", "💯", "🔥", "🫶", "❤️"
+    ];
+
+    function generateRandomText() {
+      const firstPhrase = firstPhrases[Math.floor(Math.random() * firstPhrases.length)];
+      const secondPhrase = secondPhrases[Math.floor(Math.random() * secondPhrases.length)];
+      const firstEmoji = firstEmojis[Math.floor(Math.random() * firstEmojis.length)];
+      const secondEmoji = secondEmojis[Math.floor(Math.random() * secondEmojis.length)];
+
+      const randomText = `${firstPhrase}${firstEmoji}, ${secondPhrase}!${secondEmoji}`;
+
+      const randomTextElement = document.getElementById("randomText");
+      randomTextElement.style.opacity = 0;
+      setTimeout(() => {
+        randomTextElement.innerText = randomText;
+        randomTextElement.style.opacity = 1;
+      }, 300);
+    }
+
+    function copyToClipboard() {
+      const textToCopy = document.getElementById("randomText").innerText;
+      if (textToCopy) {
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Teks berhasil disalin!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          })
+          .catch(err => {
+            console.error("Gagal menyalin teks: ", err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Gagal menyalin teks!'
+            });
+          });
+      }
+    }
+
+    window.onload = generateRandomText;
+  </script>
+</body>
+</html>
