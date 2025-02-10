@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta viewport untuk responsif -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengacak Kalimat dengan Hashtag & Fitur Salin</title>
+    <!-- Google Fonts untuk tampilan modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <style>
+        :root {
+            --primary: #ff6f91;
+            --primary-hover: #ff9671;
+            --secondary: #6fcf97;
+            --secondary-hover: #27ae60;
+            --bg-gradient: linear-gradient(135deg, #667eea, #764ba2);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+        }
+
+        /* Reset dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body dengan background gradient */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Container utama dengan efek glassmorphism */
+        .container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            text-align: center;
+            color: #eee;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        /* Styling input */
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #333;
+            outline: none;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Styling tombol */
+        button {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #btnAcak {
+            background: linear-gradient(45deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #btnAcak:hover {
+            transform: translateY(-3px);
+        }
+
+        #btnCopy {
+            background: linear-gradient(45deg, var(--secondary), var(--secondary-hover));
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #btnCopy:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Card output dengan efek glass */
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: box-shadow 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #output {
+            font-weight: 600;
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        #charCount {
+            margin-top: 10px;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mengacak Kalimat dengan Hashtag</h1>
+        <p>Masukkan kalimat (maksimal 100 huruf):</p>
+        <input type="text" id="inputKalimat" placeholder="misal: aku bermain dengan kelinci" autocomplete="off">
+        <button id="btnAcak">Acak & Tambahkan Hashtag</button>
+
+        <!-- Card untuk output -->
+        <div class="card">
+            <div id="output">Hasil akan tampil di sini...</div>
+        </div>
+
+        <button id="btnCopy">Salin Teks</button>
+        <div id="charCount">0/100</div>
+    </div>
+
+    <!-- SweetAlert Script -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        // Reset input saat halaman dimuat ulang
+        window.addEventListener('load', function () {
+            document.getElementById('inputKalimat').value = '';
+        });
+
+        // Fungsi untuk mengacak array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Fungsi untuk mengacak urutan kata dalam kalimat
+        function shuffleSentence(sentence) {
+            let words = sentence.trim().split(/\s+/);
+            words = shuffleArray(words);
+            return words.join(" ");
+        }
+
+        // Fungsi untuk mengupdate jumlah karakter output (termasuk spasi)
+        function updateCharCount(text) {
+            document.getElementById('charCount').innerText = text.length + "/100";
+        }
+
+        // Event listener untuk tombol "Acak & Tambahkan Hashtag"
+        document.getElementById('btnAcak').addEventListener('click', function () {
+            let input = document.getElementById('inputKalimat').value;
+            if (input.trim() === "") {
+                swal("Error", "Mohon masukkan kalimat terlebih dahulu.", "error");
+                document.getElementById('output').innerText = "Mohon masukkan kalimat terlebih dahulu.";
+                updateCharCount("");
+                return;
+            }
+            if (input.length > 100) {
+                swal("Error", "Input kalimat tidak boleh melebihi 100 huruf.", "error");
+                document.getElementById('output').innerText = "Input kalimat tidak boleh melebihi 100 huruf.";
+                updateCharCount("");
+                return;
+            }
+
+            let shuffledSentence = shuffleSentence(input);
+
+            let hashtags = [
+                '#cute', '#mini', '#animals', '#animal', '#animation', '#foryou',
+                '#funny', '#music', '#tranding', '#trending', '#trend', '#like',
+                '#likes', '#views', '#view', '#subscribe', '#subscribers', '#subscriber',
+                '#viralvideo', '#viralshort', '#viralshorts', '#shortvideo', '#shorts',
+                '#short', '#shortsvideo', '#shortviral', '#fyp', '#youtube', '#facts',
+                '#love', '#alone', '#america'
+            ];
+            hashtags = shuffleArray(hashtags);
+
+            if (hashtags.length < 2) {
+                swal("Error", "Tidak ada cukup hashtag.", "error");
+                document.getElementById('output').innerText = "Tidak ada cukup hashtag.";
+                updateCharCount("");
+                return;
+            }
+
+            let hashtag1 = hashtags[0];
+            let hashtag2 = hashtags[1];
+            let minHashtagsStr = " " + hashtag1 + " " + hashtag2;
+            let minHashtagsLength = minHashtagsStr.length;
+
+            let allowedSentenceLength = 100 - minHashtagsLength;
+            if (allowedSentenceLength < 0) allowedSentenceLength = 0;
+
+            if (shuffledSentence.length > allowedSentenceLength) {
+                shuffledSentence = shuffledSentence.substring(0, allowedSentenceLength).trim();
+            }
+
+            let finalResult = shuffledSentence + minHashtagsStr;
+
+            for (let i = 2; i < hashtags.length; i++) {
+                let nextHashtag = " " + hashtags[i];
+                if (finalResult.length + nextHashtag.length <= 100) {
+                    finalResult += nextHashtag;
+                } else {
+                    break;
+                }
+            }
+
+            document.getElementById('output').innerText = finalResult;
+            updateCharCount(finalResult);
+        });
+
+        // Event listener untuk tombol "Salin Teks"
+        document.getElementById('btnCopy').addEventListener('click', function () {
+            let textToCopy = document.getElementById('output').innerText;
+            if (!textToCopy || textToCopy === "Hasil akan tampil di sini..." || textToCopy.startsWith("Mohon")) {
+                return;
+            }
+            navigator.clipboard.writeText(textToCopy).then(function () {
+                swal("Berhasil", "Teks berhasil disalin!", "success");
+            }, function (err) {
+                swal("Error", "Gagal menyalin teks: " + err, "error");
+            });
+        });
+    </script>
+</body>
+
+</html>
