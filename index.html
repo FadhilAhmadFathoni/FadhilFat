@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,7 +85,8 @@
         /* Hero Section with Boxes */
         .hero {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Keep 2 columns */
+            grid-template-columns: repeat(2, 1fr);
+            /* Keep 2 columns */
             gap: 20px;
             padding: 40px 20px;
             background: #f9f9f9;
@@ -101,26 +103,34 @@
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            max-height: 650px; /* Set max height for the box */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
-            text-decoration: none; /* Remove underline from links */
+            max-height: 650px;
+            /* Set max height for the box */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Smooth transition for hover effect */
+            text-decoration: none;
+            /* Remove underline from links */
         }
 
         .hero .box:hover {
-            transform: scale(1.05); /* Scale up the box on hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Add more shadow on hover */
+            transform: scale(1.05);
+            /* Scale up the box on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            /* Add more shadow on hover */
         }
 
         .hero .box img {
             width: 100%;
-            max-height: 500px; /* Ensure the image doesn't exceed box height */
+            max-height: 500px;
+            /* Ensure the image doesn't exceed box height */
             object-fit: cover;
             margin-bottom: 10px;
-            transition: opacity 0.3s ease; /* Smooth transition for image opacity */
+            transition: opacity 0.3s ease;
+            /* Smooth transition for image opacity */
         }
 
         .hero .box:hover img {
-            opacity: 0.8; /* Slightly fade image on hover */
+            opacity: 0.8;
+            /* Slightly fade image on hover */
         }
 
         .hero .box h3 {
@@ -194,6 +204,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="logo"><i class="fas fa-home"></i> FadhilFat</div>
@@ -208,40 +219,136 @@
         <div class="progress-bar">
             <div id="progress" class="progress"></div>
         </div>
-    </div>       
+    </div>
     <main>
         <section id="home" class="hero">
             <a href="Login/password.html" class="box" data-title="Log In">
                 <img src="https://i.pinimg.com/736x/e5/6b/84/e56b841924ac729935e858cb59535fb7.jpg" alt="Image 1">
                 <h3>Log In</h3>
             </a>
-            <a href="Catatan/catatan.html" class="box" data-title="Catatan">
-                <img src="https://i.pinimg.com/236x/c9/bb/07/c9bb0785dc38e9b41322e547a1524522.jpg" alt="Image 2">
-                <h3>Catatan</h3>
-            </a>
-            <a href="Aritmatika/aritmatika.html" class="box" data-title="Aritmatika">
-                <img src="https://i.pinimg.com/236x/e3/0a/2d/e30a2d409d8ecbb6b890470a90988d45.jpg" alt="Image 3">
+            <a href="Public/aritmatika.html" class="box" data-title="Aritmatika">
+                <img src="https://i.pinimg.com/236x/5a/ee/d9/5aeed9e9e4bcc16503f5c982e649fee0.jpg" alt="Image 2">
                 <h3>Aritmatika</h3>
             </a>
-            <a href="Cocok/cocok.html" class="box" data-title="Cocok Kata">
-                <img src="https://i.pinimg.com/236x/f3/32/07/f33207bd2d97254d9ac20118c4a3bb77.jpg" alt="Image 4">
-                <h3>Cocok Kata</h3>
+            <a href="Public/batch_rename.html" class="box" data-title="Batch Rename">
+                <img src="https://i.pinimg.com/236x/61/61/e5/6161e503612e57397d4ddd7fa518b426.jpg" alt="Image 3">
+                <h3>Batch Rename</h3>
             </a>
-            <a href="Todolist/todolist.html" class="box" data-title="To Do List">
-                <img src="https://i.pinimg.com/236x/b5/10/42/b51042b6d3c380df9295852d3dbdc09f.jpg" alt="Image 4">
-                <h3>To Do List</h3>
+            <a href="Public/catatan.html" class="box" data-title="Catatan">
+                <img src="https://i.pinimg.com/236x/26/3d/52/263d52ee889f9f55aeac98e3d1037129.jpg" alt="Image 4">
+                <h3>Catatan</h3>
             </a>
-            <a href="Statistika/statistika.html" class="box" data-title="Statistika">
-                <img src="https://i.pinimg.com/236x/6d/9d/51/6d9d511eb5782f6c428980d7e39c9433.jpg" alt="Image 6">
-                <h3>Statistika</h3>
+            <a href="Public/chatbot.html" class="box" data-title="Chatbot">
+                <img src="https://i.pinimg.com/236x/69/ae/07/69ae071f4b33dcad2e3c6cd0aefd9ca3.jpg" alt="Image 5">
+                <h3>Chatbot</h3>
             </a>
-            <a href="Public/followdong.html" class="box" data-title="Statistika">
-                <img src="https://i.pinimg.com/236x/7c/44/e2/7c44e283aa5f4c90c42a17913deaaa32.jpg" alt="Image 6">
+            <a href="Public/cocok.html" class="box" data-title="Cocok">
+                <img src="https://i.pinimg.com/236x/31/52/fe/3152fe2d2d3abf1fc7f28bf1db0e874a.jpg" alt="Image 6">
+                <h3>Cocok</h3>
+            </a>
+            <a href="Public/data_tabel.html" class="box" data-title="Data Tabel">
+                <img src="https://i.pinimg.com/474x/b7/27/c9/b727c9745cf4b9b6e9f957bc2b7456b1.jpg" alt="Image 7">
+                <h3>Data Tabel</h3>
+            </a>
+            <a href="Public/data_tunggal.html" class="box" data-title="Data Tunggal">
+                <img src="https://i.pinimg.com/236x/be/e9/5c/bee95c3bcb53de56dc66c7bd1b84dc95.jpg" alt="Image 8">
+                <h3>Data Tunggal</h3>
+            </a>
+            <a href="Public/followdong.html" class="box" data-title="Follow Dong">
+                <img src="https://i.pinimg.com/474x/49/6f/10/496f10742ddcface09b063f12a83cd8f.jpg" alt="Image 9">
                 <h3>Follow Dong</h3>
             </a>
-            <a href="Public/hashtag_generator.html" class="box" data-title="Statistika">
-                <img src="https://i.pinimg.com/474x/64/00/b2/6400b2d6a20e52941dce22d283b18c67.jpg" alt="Image 6">
+            <a href="Public/foto_kotak.html" class="box" data-title="Foto Kotak">
+                <img src="https://i.pinimg.com/236x/67/34/54/673454a756e4a9874342fa967cd054d4.jpg" alt="Image 10">
+                <h3>Foto Kotak</h3>
+            </a>
+            <a href="Public/hashtag_generator.html" class="box" data-title="Hashtag Generator">
+                <img src="https://i.pinimg.com/236x/0c/e5/09/0ce509f144e6680785d170c3d7611f52.jpg" alt="Image 11">
                 <h3>Hashtag Generator</h3>
+            </a>
+            <a href="Public/kasir.html" class="box" data-title="Kasir">
+                <img src="https://i.pinimg.com/474x/c8/28/b5/c828b55a022fdff36f1a9ec74ee1b4f5.jpg" alt="Image 12">
+                <h3>Kasir</h3>
+            </a>
+            <a href="Public/kecil_foto.html" class="box" data-title="Kecil Foto">
+                <img src="https://i.pinimg.com/236x/bc/b5/1d/bcb51dcdd7d5c8b593db1b132f813a6f.jpg" alt="Image 13">
+                <h3>Kecil Foto</h3>
+            </a>
+            <a href="Public/laba.html" class="box" data-title="Laba">
+                <img src="https://i.pinimg.com/236x/93/a8/9e/93a89e094b4dd6f7fc918eed9dea8617.jpg" alt="Image 14">
+                <h3>Laba</h3>
+            </a>
+            <a href="Public/median_kelompok.html" class="box" data-title="Median Kelompok">
+                <img src="https://i.pinimg.com/236x/78/06/1d/78061d4c8ae05166ad280143f4a3ae7f.jpg" alt="Image 15">
+                <h3>Median Kelompok</h3>
+            </a>
+            <a href="Public/median_tunggal.html" class="box" data-title="Median Tunggal">
+                <img src="https://i.pinimg.com/474x/88/dc/6b/88dc6bc94855d8fcd9b8d3358b2a0133.jpg" alt="Image 16">
+                <h3>Median Tunggal</h3>
+            </a>
+            <a href="Public/permutasi_kata.html" class="box" data-title="Permutasi Kata">
+                <img src="https://i.pinimg.com/474x/66/eb/71/66eb711b2fd4c2a381384e238765edb4.jpg" alt="Image 17">
+                <h3>Permutasi Kata</h3>
+            </a>
+            <a href="Public/replace_hewan.html" class="box" data-title="Replace Hewan">
+                <img src="https://i.pinimg.com/236x/9c/eb/b5/9cebb58a786140e43309396673d8a40c.jpg" alt="Image 18">
+                <h3>Replace Hewan</h3>
+            </a>
+            <a href="Public/todolist.html" class="box" data-title="To Do List">
+                <img src="https://i.pinimg.com/236x/5c/6f/a8/5c6fa89c9ae47e2aa0449f0dfd43ddd2.jpg" alt="Image 19">
+                <h3>To Do List</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 20">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 21">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 22">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 23">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 24">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 25">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 26">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 27">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 28">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 29">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 30">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 31">
+                <h3>Segera Hadir</h3>
+            </a>
+            <a href="" class="box" data-title="Segera Hadir">
+                <img src="https://i.pinimg.com/236x/99/06/48/9906489d84b3238c8e79a18a93c13410.jpg" alt="Image 32">
+                <h3>Segera Hadir</h3>
             </a>
         </section>
     </main>
@@ -251,7 +358,8 @@
         <div class="social-icons">
             <a href="https://wa.me/6282127446402" target="_blank"><i class="fab fa-whatsapp"></i></a>
             <a href="https://github.com/FadhilAhmadFathoni" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="https://id.linkedin.com/in/fadhil-ahmad-fathoni-532a6627a" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://id.linkedin.com/in/fadhil-ahmad-fathoni-532a6627a" target="_blank"><i
+                    class="fab fa-linkedin-in"></i></a>
             <a href="https://www.youtube.com/@fadhilfathoni" target="_blank"><i class="fab fa-youtube"></i></a>
         </div>
     </footer>
@@ -262,8 +370,28 @@
         const timerElement = document.getElementById('timer');
         const timeDetailsElement = document.getElementById('time-details');
         const progressElement = document.getElementById('progress');
-
-        const dataTitles = ["Log In", "Catatan", "Aritmatika", "Cocok Kata", "To Do List", "Statistika"];
+        const dataTitles = [
+            "Log In",
+            "Aritmatika",
+            "Batch Rename",
+            "Catatan",
+            "Chatbot",
+            "Cocok",
+            "Data Tabel",
+            "Data Tunggal",
+            "Follow Dong",
+            "Foto Kotak",
+            "Hashtag Generator",
+            "Kasir",
+            "Kecil Foto",
+            "Laba",
+            "Median Kelompok",
+            "Median Tunggal",
+            "Permutasi Kata",
+            "Replace Hewan",
+            "To Do List",
+            "Segera Hadir"
+        ];
         const suggestionsBox = document.getElementById('suggestions');
 
         function updateCountdown() {
@@ -290,45 +418,45 @@
         }
 
         document.getElementById('search-input').addEventListener('input', function () {
-    const input = this.value;
-    showSuggestions(input);
-    searchContent(input);
-});
+            const input = this.value;
+            showSuggestions(input);
+            searchContent(input);
+        });
 
-function showSuggestions(input) {
-    const suggestionsBox = document.getElementById('suggestions');
-    suggestionsBox.innerHTML = ''; // Bersihkan saran sebelumnya
+        function showSuggestions(input) {
+            const suggestionsBox = document.getElementById('suggestions');
+            suggestionsBox.innerHTML = ''; // Bersihkan saran sebelumnya
 
-    if (input.trim() === '') return; // Jangan tampilkan saran jika input kosong
+            if (input.trim() === '') return; // Jangan tampilkan saran jika input kosong
 
-    const filtered = dataTitles.filter(title => title.toLowerCase().includes(input.toLowerCase()));
+            const filtered = dataTitles.filter(title => title.toLowerCase().includes(input.toLowerCase()));
 
-    filtered.forEach(item => {
-        const div = document.createElement('div');
-        div.textContent = item;
-        div.classList.add('suggestion-item'); // Tambahkan kelas untuk styling jika diperlukan
-        div.onclick = () => {
-            document.getElementById('search-input').value = item;
-            suggestionsBox.innerHTML = ''; // Hapus saran setelah dipilih
-            searchContent(item);
-        };
-        suggestionsBox.appendChild(div);
-    });
-}
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = item;
+                div.classList.add('suggestion-item'); // Tambahkan kelas untuk styling jika diperlukan
+                div.onclick = () => {
+                    document.getElementById('search-input').value = item;
+                    suggestionsBox.innerHTML = ''; // Hapus saran setelah dipilih
+                    searchContent(item);
+                };
+                suggestionsBox.appendChild(div);
+            });
+        }
 
-function searchContent(input) {
-    const boxes = document.querySelectorAll('.hero .box');
+        function searchContent(input) {
+            const boxes = document.querySelectorAll('.hero .box');
 
-    if (input.trim() === '') {
-        boxes.forEach(box => box.style.display = 'block');
-        return;
-    }
+            if (input.trim() === '') {
+                boxes.forEach(box => box.style.display = 'block');
+                return;
+            }
 
-    boxes.forEach(box => {
-        const title = box.getAttribute('data-title').toLowerCase();
-        box.style.display = title.includes(input.toLowerCase()) ? 'block' : 'none';
-    });
-}
+            boxes.forEach(box => {
+                const title = box.getAttribute('data-title').toLowerCase();
+                box.style.display = title.includes(input.toLowerCase()) ? 'block' : 'none';
+            });
+        }
 
 
         // Update setiap detik
@@ -336,4 +464,5 @@ function searchContent(input) {
         updateCountdown();
     </script>
 </body>
+
 </html>
