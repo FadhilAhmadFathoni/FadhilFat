@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kumpulan AI Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .card {
+            width: 220px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: black;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card p {
+            font-weight: bold;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 10px 0 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-box {
+            margin: 20px 0;
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="goBack()">⬅ Kembali</button>
+    <br>
+    <input type="text" class="search-box" onkeyup="searchTools()" placeholder="Cari AI Tools...">
+
+    <h1>🧠 Kumpulan AI Tools</h1>
+
+    <h2>🎨 Text To Image</h2>
+    <div class="grid">
+        <a href="https://leonardo.ai/" target="_blank" class="card">
+            <img src="https://i.pinimg.com/474x/dd/d6/dc/ddd6dc17e1ab50d8673e911db2e5e3fa.jpg" alt="Leonardo AI">
+            <p>Leonardo AI</p>
+        </a>
+        <a href="https://www.piclumen.com/" target="_blank" class="card">
+            <img src="https://i.pinimg.com/280x280_RS/b6/87/13/b68713d70a0f1e3fe408d285d37cf21c.jpg" alt="Piclumen">
+            <p>Piclumen</p>
+        </a>
+    </div>
+
+    <h2>🖼️ Image To Image</h2>
+    <div class="grid">
+        <a href="https://hailuoai.video/" target="_blank" class="card">
+            <img src="https://i.pinimg.com/474x/75/9b/d0/759bd0c6f572a0c6af65492613b3ccbb.jpg" alt="Hailuo AI">
+            <p>Hailuo AI</p>
+        </a>
+    </div>
+
+    <h2>🔗 Non AI</h2>
+    <div class="grid">
+        <a href="https://id.pinterest.com/" target="_blank" class="card">
+            <img src="https://i.pinimg.com/236x/a5/4b/f4/a54bf4dddd898c6172beda106217d3d0.jpg" alt="Pinterest">
+            <p>Pinterest</p>
+        </a>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function searchTools() {
+            let input = document.querySelector('.search-box').value.toLowerCase();
+            let cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                let title = card.querySelector('p').textContent.toLowerCase();
+                if (title.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
